@@ -9,6 +9,9 @@ have a .env file in root of projects with:
 2. SPOTIFY_CLIENT_SECRET='secret'
 3. SPOTIFY_CLIENT_CALLBACK_URL='http://localhost:8080/auth/callback'
 
+client .env
+1. REACT_APP_SERVER_URL=http://localhost:8080
+
 **id and secret** can be found in the spotify dev account settings
 
 Either create your own spotify dev account ->
