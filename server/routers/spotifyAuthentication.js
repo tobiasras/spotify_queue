@@ -1,6 +1,6 @@
 import querystring from 'querystring'
-import spotifyToken from '../spotify/spotifyToken.js'
-import getAccessToken, { setupAccessToken } from '../spotify/spotifytAccesToken.js'
+import spotifyToken from '../spotify/authentication/spotifyToken.js'
+import getAccessToken, { setupAccessToken } from '../spotify/authentication/spotifytAccessToken.js'
 
 import express from 'express'
 
@@ -49,7 +49,6 @@ routerSpotifyAuthentication.get('/callback', async (req, res) => {
 
   setupAccessToken(spotifyAccess)
   res.redirect('http://localhost:3000/admin')
-  
 })
 
 export default routerSpotifyAuthentication
