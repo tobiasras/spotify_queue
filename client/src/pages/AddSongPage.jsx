@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import Navbar from "../components/Navbar";
 import { Search } from "../components/Search";
 import { Track } from "../components/Track";
 
@@ -25,8 +24,7 @@ async function addQueue(trackId){
 
 const AddSongPage = () => {
     const [search, setSearch] = useState([]);
-        
-    
+
     return (
         <div className="w-screen h-full overflow-x-hidden overflow-y-scroll grid grid-cols-[1fr_minmax(0,1000px)_1fr] items-center place-content-center bg-neutral-800 text-white">
             <main className="flex flex-col justify-center items-center col-[2/3] p-4">
@@ -44,12 +42,9 @@ const AddSongPage = () => {
                         )) : "Chould not get track"}
                     </ul>
                 </section>
-            </main>
-            <Navbar/>
-            
+            </main>            
         </div>
     )
 }
-
 
 export default AddSongPage

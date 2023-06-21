@@ -1,4 +1,3 @@
-import Navbar from "../components/Navbar";
 import {Link} from "react-router-dom";
 
 const InfoPage = () => {
@@ -6,15 +5,17 @@ const InfoPage = () => {
         <div className="">
             <main className="w-full p-3">
                 <div className="mb-5 text-gray-400">
-                    <h1 className="text-3xl font-bold"> Info page</h1>
+                    <h1 className="text-3xl font-bold">Info page</h1>
                     <p>
-                        A web page to controll the guldbar playlist
+                        A web page to controlling the Guldbar playlist
                     </p>
 
-                    <p className="mt-2 font-bold">Created by:</p>
-                        <p>@Tobiasras | Tobias Juul Rasmussen</p>
-                        <p>@Breelef | Emil Breilev Vinther</p>
-                        <p>@Magn902m | Magnus Nielsen</p>
+                    <p className="mt-2 font-bold flex flex-col">Created by:</p>
+                    <ul>
+                        <li className="hover:underline"><a href="https://github.com/tobiasras">@Tobiasras | Tobias Juul Rasmussen</a></li>
+                        <li className="hover:underline"><a href="https://github.com/Breelef">@Breelef | Emil Breilev Vinther</a></li>
+                        <li className="hover:underline"><a href="https://github.com/magn902m">@Magn902m | Magnus Nielsen</a></li>
+                    </ul>
                 </div>
 
                 <div className="flex justify-center">
@@ -26,11 +27,8 @@ const InfoPage = () => {
                 </div>
             </main>
 
-            <Navbar/>
         </div>
-)
+    )
 }
-
-
 
 export default InfoPage

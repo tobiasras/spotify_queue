@@ -1,4 +1,3 @@
-import Navbar from "../components/Navbar";
 import { Queue } from "../components/Queue";
 import { CurrentTrack } from "../components/CurrentTrack";
 
@@ -15,9 +14,7 @@ const FrontpagePage = () => {
                     <h2 className="text-3xl mb-4">Current queue</h2>
                     <Queue/>
                 </section>   
-
             </main>
-            <Navbar/>
         </div>
     )
 }
