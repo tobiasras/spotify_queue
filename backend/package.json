@@ -1,0 +1,37 @@
+{
+  "name": "guldbars-playliste-backend",
+  "version": "0.0.0",
+  "engines": {
+    "node": "=18.12.1"
+  },
+  "description": "",
+  "type": "module",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "dev": "nodemon app.js nolimit",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22",
+    "express-rate-limit": "^6.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tobiasras/Guldbars-playliste-backend.git"
+  },
+  "author": "Tobiasras",
+  "license": "MIT",
+  "homepage": "#",
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "eslint": "^8.36.0",
+    "eslint-config-semistandard": "^17.0.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1"
+  }
+}
