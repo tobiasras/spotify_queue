@@ -1,6 +1,6 @@
 import spotifyToken from './spotifyToken.js'
 let timeToExpire
-let accesKey = null
+let accessKey = null
 let requestKey = null
 
 export default async function getAccessToken () {
@@ -9,16 +9,16 @@ export default async function getAccessToken () {
   }
 
   const nowTime = new Date()
-  if (!accesKey) {
+  if (!accessKey) {
     await requestToken(nowTime)
-    return accesKey
+    return accessKey
   }
 
   if (timeToExpire < nowTime) {
     await requestToken(nowTime)
-    return accesKey
+    return accessKey
   } else {
-    return accesKey
+    return accessKey
   }
 }
 
@@ -29,12 +29,12 @@ async function requestToken (nowTime) {
 
   const res = await spotifyToken(body)
 
-  accesKey = res.access_token
+  accessKey = res.access_token
   timeToExpire = new Date(nowTime.getTime() + res.expires_in * 1000)
 }
 
 export function setupAccessToken (setup) {
-  accesKey = setup.access_token
+  accessKey = setup.access_token
   requestKey = setup.refresh_token
   timeToExpire = new Date(new Date().getTime() + setup.expires_in * 1000)
 }
