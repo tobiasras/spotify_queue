@@ -1,4 +1,3 @@
-import Navbar from "../components/Navbar";
 import React, {useEffect, useState} from "react";
 import AdminPanel from "../components/AdminPanel/AdminPanel";
 
@@ -58,7 +57,6 @@ const AdminPage = () => {
             </main>
 
 
-            <Navbar/>
         </div>
     )
 }
