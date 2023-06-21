@@ -1,6 +1,6 @@
-import Navbar from "../component/Navbar";
-import { Queue } from "../component/Queue";
-import { CurrentTrack } from "../component/CurrentTrack";
+import Navbar from "../components/Navbar";
+import { Queue } from "../components/Queue";
+import { CurrentTrack } from "../components/CurrentTrack";
 
 const FrontpagePage = () => {
 

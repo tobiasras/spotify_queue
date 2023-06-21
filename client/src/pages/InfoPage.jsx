@@ -1,4 +1,4 @@
-import Navbar from "../../component/Navbar";
+import Navbar from "../components/Navbar";
 import {Link} from "react-router-dom";
 
 const InfoPage = () => {
