@@ -24,7 +24,6 @@ const io = new Server(server)
 io.on('connection', async socket => {
 
 
-
 })
 
 // ROUTES
@@ -32,12 +31,11 @@ app.use('/auth', routerSpotifyAuthentication)
 app.use('/admin', adminLogin)
 app.use('/search', spotifySearch)
 
-
 app.listen(8080, (error) => {
   if (error) {
     console.log(error)
   } else {
     console.log('Server is running')
-    console.log('limits = ' + isNoLimit)
+    console.log('limits = ' + !isNoLimit)
   }
 })
