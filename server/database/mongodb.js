@@ -13,5 +13,6 @@ export default {
     logs: db.collection('logs'),
     queue: db.collection('queue'),
     playedSongs: db.collection('played-songs'),
+    bannedSongs: db.collection('banned-songs'),
     fallbackPlaylist: db.collection('fallback-playlist')
 }
