@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Track } from "../component/Track"
+import { Track } from "../components/Track"
 
 export const CurrentTrack = () => {
     const [state, setState] = useState({});

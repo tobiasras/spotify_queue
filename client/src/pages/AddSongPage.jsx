@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import Navbar from "../component/Navbar";
-import { Search } from "../component/Search";
-import { Track } from "../component/Track";
+import Navbar from "../components/Navbar";
+import { Search } from "../components/Search";
+import { Track } from "../components/Track";
 
 async function addQueue(trackId){
     const promise = fetch(`http://localhost:8080/queue/?uri=spotify:track:${trackId}`, {
