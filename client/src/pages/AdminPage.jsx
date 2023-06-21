@@ -1,7 +1,6 @@
-import Navbar from "../../components/Navbar";
+import Navbar from "../components/Navbar";
 import React, {useEffect, useState} from "react";
-import {login} from "./Login";
-import AdminPanel from "../../components/AdminPanel/AdminPanel";
+import AdminPanel from "../components/AdminPanel/AdminPanel";
 
 const AdminPage = () => {
 
@@ -25,7 +24,7 @@ const AdminPage = () => {
             } else {
                 setIsloggedIn(true)
                 localStorage.setItem("isLoggedIn", "secretkey")
-                admin = React.lazy(() => import("../../components/AdminPanel/AdminPanel"))
+                admin = React.lazy(() => import("../components/AdminPanel/AdminPanel"))
             }
 
         }
@@ -63,25 +62,16 @@ const AdminPage = () => {
         </div>
     )
 }
-
-
 export default AdminPage
 
-// export async function login(password) {
-//     const serverUrl = process.env.REACT_APP_SERVER_URL
-//     let response
-//     try {
-//         response = fetch(`${serverUrl}/admin/${password}`)
-//         return await response
-//     } catch (error) {
-//         console.log(error)
-//         return null
-//     }
-// }
-
-/*
-
-
-
-
- */
+export async function login(password) {
+    const serverUrl = process.env.REACT_APP_SERVER_URL
+    let response
+    try {
+        response = fetch(`${serverUrl}/admin/${password}`)
+        return await response
+    } catch (error) {
+        console.log(error)
+        return null
+    }
+}
