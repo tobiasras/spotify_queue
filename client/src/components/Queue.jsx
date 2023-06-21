@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {Link} from "react-router-dom";
-import {Track} from "../component/Track";
+import {Track} from "../components/Track";
 
 export const Queue = () => {
     const [queue, setQueue] = useState([]);

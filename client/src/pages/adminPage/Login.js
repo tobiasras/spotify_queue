@@ -8,5 +8,4 @@ export async function login(password) {
         console.log(error)
         return null
     }
-
 }

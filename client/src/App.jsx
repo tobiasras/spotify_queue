@@ -1,7 +1,7 @@
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import FrontpagePage from "./pages/FrontpagePage";
 import AdminPage from "./pages/adminPage/AdminPage";
-import InfoPage from "./pages/infoPage/InfoPage";
+import InfoPage from "./pages/InfoPage";
 import AddSongPage from "./pages/AddSongPage";
 
 function App() {
