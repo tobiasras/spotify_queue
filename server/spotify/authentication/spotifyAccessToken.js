@@ -16,7 +16,7 @@ export async function getAccessToken() {
             await requestTokenWithRefreshToken()
 
             try {
-                await db.spotifyAccess.updateOne({username: process.env.USERNAME},
+                await db.spotifyAccess.updateOne({username: process.env.USER},
                     {$set: { access_token: accessToken, creationTime: new Date() } })
             } catch (e) {
                 reject("could update token to database" + e)
@@ -37,7 +37,7 @@ export function isLoggedIn() {
  * Checks database if a token exist in database
  */
 export async function checkIfLoggedInBefore() {
-    const token = await db.spotifyAccess.findOne({username: process.env.USERNAME})
+    const token = await db.spotifyAccess.findOne({username: process.env.USER})
 
     if (token) {
         setValues(token)
