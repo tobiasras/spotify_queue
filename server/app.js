@@ -5,7 +5,6 @@ import routerSpotifyAuthentication from './routers/spotifyAuthentication.js'
 import adminLogin from './routers/adminLogin.js'
 import spotifySearch from './routers/spotifySearch.js'
 import http from "http"
-import { Server } from 'socket.io'
 import {socketHandler} from './sockets/socketHandler.js'
 import {Server} from 'socket.io'
 import {checkIfLoggedInBefore} from "./spotify/authentication/spotifyAccessToken.js";
@@ -41,11 +40,6 @@ app.use('/search', spotifySearch)
 
 isDevMode && devmode(app)
 
-io.on("connection", (socket) => {
-  console.log(socket);
-  socket.emit("queue", "--- test queue ---");
-});
-
 socketHandler(io)
 
 server.listen(8080, (error) => {
@@ -53,6 +47,5 @@ server.listen(8080, (error) => {
     console.log(error)
   } else {
     console.log('Server is running')
-    console.log('limits = ' + !isNoLimit)
   }
 })
