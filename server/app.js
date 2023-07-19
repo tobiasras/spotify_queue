@@ -4,8 +4,9 @@ import cors from 'cors'
 import routerSpotifyAuthentication from './routers/spotifyAuthentication.js'
 import adminLogin from './routers/adminLogin.js'
 import spotifySearch from './routers/spotifySearch.js'
-import http from "http"
+import http from 'http'
 import { Server } from 'socket.io'
+import {socketHandler} from './sockets/socketHandler.js'
 dotenv.config()
 const app = express()
 
@@ -19,19 +20,26 @@ app.use(express.urlencoded({ extended: true }))
 
 // SOCKETS
 const server = http.createServer(app)
-const io = new Server(server)
-
-io.on('connection', async socket => {
-
-
+// const io = new Server(server)
+export const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000'
+  }
 })
 
-// ROUTES
 app.use('/auth', routerSpotifyAuthentication)
 app.use('/admin', adminLogin)
 app.use('/search', spotifySearch)
 
-app.listen(8080, (error) => {
+
+io.on("connection", (socket) => {
+  console.log(socket);
+  socket.emit("queue", "--- test queue ---");
+});
+
+socketHandler(io)
+
+server.listen(8080, (error) => {
   if (error) {
     console.log(error)
   } else {

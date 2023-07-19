@@ -8,7 +8,7 @@ const FrontpagePage = () => {
             <main className="flex flex-col col-[2/3] gap-4 p-4">
                 <h2 className="text-3xl">Playing now</h2>
                 <section className="flex flex-col gap-4 bg-neutral-700 p-4 rounded-md">
-                    <CurrentTrack />
+                    {/* <CurrentTrack /> */}
                 </section>
                 <section className="flex flex-col gap-4 bg-neutral-700 p-4 rounded-md mt-14">          
                     <h2 className="text-3xl mb-4">Current queue</h2>
