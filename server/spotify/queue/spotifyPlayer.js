@@ -1,11 +1,11 @@
 /**
- * spotifyRequester.js handles all spotify request about songs, queue and commands to the playback device.
+ * spotifyPlayer.js handles all spotify request about songs, queue and commands to the playback device.
  * created by @Tobiasras
  * 21-06-2023
  */
 
-import { getAccessToken } from "../../spotify/authentication/spotifyAccessToken.js";
-import {filterTrackObject} from "../../spotify/filters/trackObjectFilter.js";
+import { getAccessToken } from "../authentication/spotifyAccessToken.js";
+import {filterTrackObject} from "../filters/trackObjectFilter.js";
 
 /**
  * Get information about the user’s current playback state, including track or episode, progress, and active device.

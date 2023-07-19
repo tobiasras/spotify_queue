@@ -1,8 +1,8 @@
 import querystring from 'querystring'
-import spotifyToken from '../spotify/authentication/spotifyToken.js'
-import getAccessToken, { setupAccessToken } from '../spotify/authentication/spotifytAccessToken.js'
+import { getAccessToken } from '../spotify/authentication/spotifyAccessToken.js'
 
 import express from 'express'
+import {fetchSpotifyToken} from "../spotify/authentication/fetchSpotifyToken.js";
 
 const routerSpotifyAuthentication = express.Router()
 
@@ -40,15 +40,17 @@ routerSpotifyAuthentication.get('/login', function (req, res) {
 
 routerSpotifyAuthentication.get('/callback', async (req, res) => {
   const code = req.query.code || null
-  const body = new URLSearchParams()
-  body.append('grant_type', 'authorization_code')
-  body.append('code', code)
-  body.append('redirect_uri', process.env.SPOTIFY_CLIENT_CALLBACK_URL)
+  const requestTokenInfo = new URLSearchParams()
+  requestTokenInfo.append('grant_type', 'authorization_code')
+  requestTokenInfo.append('code', code)
+  requestTokenInfo.append('redirect_uri', process.env.SPOTIFY_CLIENT_CALLBACK_URL)
 
-  const spotifyAccess = await spotifyToken(body)
+  const token = await fetchSpotifyToken(requestTokenInfo)
+  token.username = process.env.USERNAME
+  token.creationTime = new Date()
 
-  setupAccessToken(spotifyAccess)
   res.redirect('http://localhost:3000/admin')
 })
+
 
 export default routerSpotifyAuthentication

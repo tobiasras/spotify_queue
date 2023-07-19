@@ -1,10 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+
+
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+
+    <meta charset="UTF-8">
+    <title>Debug mode</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
-<body>
-$END$
+
+<body class="bg-dark-subtle">
+
+<div class="row">
+    <div class="col-1">
+
+    </div>
+
+
+    <div class="col-5 p-5">
+        <h2>Token info:</h2>
+
+        <div>
+            <p class="h5">Access_token:</p>
+            <p id="access_token"></p>
+        </div>
+
+        <div>
+            <p class="h5">expires_in:</p>
+            <p id="refresh_token"></p>
+        </div>
+
+        <div>
+            <p class="h5">token_type:</p>
+            <p id="token_type"></p>
+        </div>
+
+
+        <div>
+            <p class="h5">expires_in:</p>
+            <p id="expires_in"></p>
+        </div>
+
+        <div>
+            <p class="h5">scope:</p>
+            <p id="scope"></p>
+        </div>
+
+
+        <div>
+            <p class="h5">username:</p>
+            <p id="username"></p>
+        </div>
+
+        <div>
+            <p class="h5">Creating time:</p>
+            <p id="creationTime"></p>
+        </div>
+
+    </div>
+
+
+    <div class="col-5 p-5">
+        <h1>Functions</h1>
+        <a href="auth/login/devmode" class="btn btn-primary">Login</a>
+    </div>
+
+
+    <div class="col-1">
+
+    </div>
+
+</div>
+
+<script>
+    const url = window.location.href
+
+    if (url.split("?")[1]) {
+        const token = JSON.parse(decodeURI(url.split("?")[1]))
+        console.log(token)
+        document.getElementById('access_token').innerText = token.access_token
+        document.getElementById('token_type').innerText = token.token_type
+        document.getElementById('expires_in').innerText = token.expires_in
+        document.getElementById('refresh_token').innerText = token.refresh_token
+        document.getElementById('scope').innerText = token.scope
+        document.getElementById('username').innerText = token.username
+
+        const createdAt = new Date(token.creationTime);
+
+
+        document.getElementById('creationTime').innerText = `Date: ${createdAt.getFullYear()}-${createdAt.getMonth()}-${createdAt.getDay()} \nTime: ${createdAt.getHours()}:${createdAt.getMinutes()}`
+    }
+</script>
+
+
 </body>
+
 </html>
+
