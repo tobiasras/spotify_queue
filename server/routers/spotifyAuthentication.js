@@ -46,7 +46,7 @@ routerSpotifyAuthentication.get('/callback', async (req, res) => {
   requestTokenInfo.append('redirect_uri', process.env.SPOTIFY_CLIENT_CALLBACK_URL)
 
   const token = await fetchSpotifyToken(requestTokenInfo)
-  token.username = process.env.USERNAME
+  token.username = process.env.USER
   token.creationTime = new Date()
 
   res.redirect('http://localhost:3000/admin')

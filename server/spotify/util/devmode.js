@@ -32,7 +32,7 @@ export const devmode = (app) => {
         requestTokenInfo.append('redirect_uri', 'http://localhost:8080/auth/callback/test')
 
         const token = await fetchSpotifyToken(requestTokenInfo)
-        token.username = process.env.USERNAME
+        token.username = process.env.USER
         token.creationTime = new Date()
 
         try {
