@@ -9,7 +9,7 @@
   "main": "server/app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "dev": "nodemon app.js nolimit",
+    "dev": "nodemon app.js devmode",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

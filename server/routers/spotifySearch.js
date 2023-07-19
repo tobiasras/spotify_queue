@@ -1,5 +1,5 @@
 import express from 'express'
-import getAccessToken from '../spotify/authentication/spotifytAccessToken.js'
+import { getAccessToken } from '../spotify/authentication/spotifyAccessToken.js'
 import sendMessageByStatus from '../spotify/util/sendMessage.js'
 import { filterTrackObject } from '../spotify/filters/trackObjectFilter.js'
 

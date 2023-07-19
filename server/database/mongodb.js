@@ -8,11 +8,13 @@ const client = new MongoClient(process.env.MONGODB_URL, {
     }
 })
 
-const db = client.db('spotify-queue')
+const db = client.db('spotify_queue')
+
 export default {
     logs: db.collection('logs'),
     queue: db.collection('queue'),
-    playedSongs: db.collection('played-songs'),
-    bannedSongs: db.collection('banned-songs'),
-    fallbackPlaylist: db.collection('fallback-playlist')
+    playedSongs: db.collection('played_songs'),
+    bannedSongs: db.collection('banned_songs'),
+    fallbackPlaylist: db.collection('fallback_playlist'),
+    spotifyAccess: db.collection('spotify_tokens')
 }
