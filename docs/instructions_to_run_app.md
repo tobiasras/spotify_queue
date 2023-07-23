@@ -16,7 +16,10 @@ To run the server:
 ``` shell
 npm start
 ```
-
+To run the server in dev mode:
+``` shell
+npm run dev
+```
 ### Client
 Have a .env file in root of the client folder with:
 1. REACT_APP_SERVER_URL=http://localhost:8080
@@ -30,4 +33,8 @@ Then the application should be ready to run.
 To run the client:
 ``` shell
 npm start
+```
+To run the client in dev mode:
+``` shell
+npm run dev
 ```
