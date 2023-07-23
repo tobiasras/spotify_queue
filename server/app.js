@@ -5,6 +5,7 @@ import routerSpotifyAuthentication from './routers/spotifyAuthentication.js'
 import adminLogin from './routers/adminLogin.js'
 import spotifySearch from './routers/spotifySearch.js'
 import http from "http"
+import {socketHandler} from './sockets/socketHandler.js'
 import {Server} from 'socket.io'
 import {checkIfLoggedInBefore} from "./spotify/authentication/spotifyAccessToken.js";
 import {devmode} from "./spotify/util/devmode.js";
@@ -27,24 +28,25 @@ checkIfLoggedInBefore().then((isLoggedIn) => {
 
 // SOCKETS
 const server = http.createServer(app)
-const io = new Server(server)
-io.on('connection', async socket => {
-
+// const io = new Server(server)
+export const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000'
+  }
 })
 
-// ROUTES
 app.use('/auth', routerSpotifyAuthentication)
 app.use('/admin', adminLogin)
 app.use('/search', spotifySearch)
 
-if (isDevMode) {
-    devmode(app)
-}
+isDevMode && devmode(app)
 
-app.listen(8080, (error) => {
-    if (error) {
-        console.log(error)
-    } else {
-        console.log('Server is running')
-    }
+socketHandler(io)
+
+server.listen(8080, (error) => {
+  if (error) {
+    console.log(error)
+  } else {
+    console.log('Server is running')
+  }
 })

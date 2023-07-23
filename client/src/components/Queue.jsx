@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from "react";
 import {Link} from "react-router-dom";
 import {Track} from "../components/Track";
+// import {socket} from "../socket";
+import { io } from 'socket.io-client';
 
 export const Queue = () => {
     const [queue, setQueue] = useState([]);
 
     useEffect(()=> {
-        async function getQueue() {
-            const connQueue = await fetch("http://localhost:8080/queue/", {
-                method: "GET"
-            });
-            const dataQueue = await connQueue.json();
-            setQueue(dataQueue)
-        }
-        getQueue();
+        const socket = io('http://localhost:8080');
+
+        socket.on('connect', ()=> console.log(socket.id))
+
+        socket.on('queue', (data)=> {
+            console.log(data)
+            // setQueue(data)
+        })
+
+        socket.on('disconnect', ()=> console.log('server disconnected'))
     }, [])
     
     return (
