@@ -21,6 +21,7 @@ app.use(express.urlencoded({extended: true}))
 
 // CHECKS IF LOGGED IN
 checkIfLoggedInBefore().then((isLoggedIn) => {
+
     console.log("is logged in", isLoggedIn)
 })
 

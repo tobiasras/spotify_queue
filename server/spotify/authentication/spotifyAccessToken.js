@@ -38,7 +38,6 @@ export function isLoggedIn() {
  */
 export async function checkIfLoggedInBefore() {
     const token = await db.spotifyAccess.findOne({username: process.env.USER})
-
     if (token) {
         setValues(token)
         return true
