@@ -1,29 +1,49 @@
-import React, {useState} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import { Search } from "../components/Search";
 import { Track } from "../components/Track";
+import { io } from 'socket.io-client';
 
-async function addQueue(trackId){
-    const promise = fetch(`http://localhost:8080/queue/?uri=spotify:track:${trackId}`, {
-        method: "POST"
-    })
-    const result = await promise
-    switch(result.status){
-        case 204:
-            alert("Song added to queue")
-            break
-        case 404:
-            alert("404 - Backend not logged in")
-            break
-        case 429:
-            alert("429 - No more requests - wait for some time")
-            break
-        default:
-            alert("ERROR")
-    }
-}
 
 const AddSongPage = () => {
     const [search, setSearch] = useState([]);
+    const [track, setTrack] = useState();
+    const socketRef = useRef();
+
+    useEffect(() => {
+        socketRef.current = io('http://localhost:8080');
+
+        socketRef.current.on('connect', () => console.log(socketRef.current.id));
+
+        socketRef.current.on('addToQueue', (data) => {
+            console.log(data);
+            setTrack(data);
+        });
+        const handleClick = (data) => {
+            if (socketRef.current) {
+                socketRef.current.emit('buttonClick', data); // whatever event you want to emit on button click
+            }
+        }
+    async function addQueue(trackId){
+        const promise = fetch(`http://localhost:8080/queue/?uri=spotify:track:${trackId}`, {
+            method: "POST"
+        })
+        const result = await promise
+        switch(result.status){
+            case 204:
+                alert("Song added to queue")
+                const data = await result.json();
+                setTrack(data);
+                break
+            case 404:
+                alert("404 - Backend not logged in")
+                break
+            case 429:
+                alert("429 - No more requests - wait for some time")
+                break
+            default:
+                alert("ERROR")
+        }
+    }
 
     return (
         <div className="w-screen h-full overflow-x-hidden overflow-y-scroll grid grid-cols-[1fr_minmax(0,1000px)_1fr] items-center place-content-center bg-neutral-800 text-white">
@@ -37,7 +57,7 @@ const AddSongPage = () => {
                         {search !== "" ? search.map((trackInfo) => (
                             <li className="flex items-center justify-between gap-4">
                                 <Track key={trackInfo.id} {...trackInfo} />
-                                <button onClick={() => addQueue(trackInfo.id)}>Add</button>
+                                <button onClick={() => handleClick(trackInfo.id)}>Add</button>
                             </li>
                         )) : "Chould not get track"}
                     </ul>

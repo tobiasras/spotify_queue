@@ -1,15 +1,20 @@
+import {io} from "../app.js";
+
 export const socketHandler = (io) => {
     io.on("connection", (socket) => {        
         socket.emit("queue", "--- test queue ---");
     });
 }
 
-// io.on('connection', async socket => {
-//   console.log('addToQueue')
-//   socket.on('addToQueue', (addToQueue) => {
-//     console.log(addToQueue)
-//     // socket.emit('addToQueue', addToQueue);
-//   })
+io.on('connection', async socket => {
+    console.log('addToQueue')
+    socket.on('buttonClick', (data) => {
+        console.log(data)
+        socket.emit('addToQueue', data);
+    })
+});
+
+
 // })
 // io.on('connection', async socket => {
 //   console.log('playing')
