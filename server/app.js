@@ -9,7 +9,7 @@ import {socketHandler} from './sockets/socketHandler.js'
 import {Server} from 'socket.io'
 import {checkIfLoggedInBefore} from "./spotify/authentication/spotifyAccessToken.js";
 import {devmode} from "./spotify/util/devmode.js";
-import {startQueue} from "./Queue/queue.js";
+import {skipSong, startQueue, stopQueue} from "./Queue/queue.js";
 
 const app = express()
 
@@ -37,11 +37,27 @@ export const io = new Server(server, {
   }
 })
 
-startQueue(io)
 
 app.use('/auth', routerSpotifyAuthentication)
 app.use('/admin', adminLogin)
 app.use('/search', spotifySearch)
+
+app.get('/start', (req, res) => {
+  startQueue(io)
+  res.sendStatus(204);
+})
+
+app.get('/skip', (req, res) => {
+  skipSong(io)
+  res.sendStatus(204);
+})
+
+app.get('/stop', (req, res) => {
+  stopQueue()
+  res.sendStatus(204);
+})
+
+
 
 isDevMode && devmode(app)
 

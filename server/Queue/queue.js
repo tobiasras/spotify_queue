@@ -1,10 +1,25 @@
 import db from '../database/mongodb.js'
 import spotifyPlayer from "../spotify/player/spotifyPlayer.js";
 
+let currentTimeout
+
 export function startQueue(socket) {
     console.log("start queue is being run")
-    songCycle(0, socket)
+    songCycle(0, socket) // 0, because no song is playing
 }
+
+export function skipSong(socket) {
+    clearTimeout(currentTimeout)
+    songCycle(0, socket) // 0, because no song is playing
+}
+
+export function stopQueue() {
+    clearTimeout(currentTimeout)
+    spotifyPlayer.pause().then(value => {
+        console.log("stop queue:", value)
+    })
+}
+
 
 function songCycle(length, socket) {
     console.log(`songCycle - length: ${length}`)
@@ -13,7 +28,7 @@ function songCycle(length, socket) {
         socket.emit("queue", currentQueue)
     })
 
-    setTimeout(async () => {
+    currentTimeout = setTimeout(async () => {
         try {
             let result = await db.queue.findOneAndDelete({}, {sort: {_id: 1}}); // DELETES SONG AFTER FETCH
             let newTrack = result.value
@@ -24,7 +39,12 @@ function songCycle(length, socket) {
                     {sort: {"amount_played": 1},}
                 )
             }
-            spotifyPlayer.addSong(newTrack.uri).catch(console.log)
+            spotifyPlayer.addSong(newTrack.uri).then(() => {
+                    spotifyPlayer.next().then(value => {
+                        console.log("next song:", value)
+                    })
+            })
+
             console.log(`next song:  ${newTrack.name}`)
             songCycle(newTrack.duration_ms, socket)
         } catch {
@@ -32,6 +52,7 @@ function songCycle(length, socket) {
         }
     }, length)
 }
+
 
 
 
