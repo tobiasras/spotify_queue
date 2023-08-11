@@ -9,8 +9,11 @@ import {socketHandler} from './sockets/socketHandler.js'
 import {Server} from 'socket.io'
 import {checkIfLoggedInBefore} from "./spotify/authentication/spotifyAccessToken.js";
 import {devmode} from "./spotify/util/devmode.js";
+import {startQueue} from "./Queue/queue.js";
 
 const app = express()
+
+
 
 // RUN SETTINGS
 const isDevMode = process.argv.indexOf('devmode') !== -1
@@ -22,7 +25,6 @@ app.use(express.urlencoded({extended: true}))
 
 // CHECKS IF LOGGED IN
 checkIfLoggedInBefore().then((isLoggedIn) => {
-
     console.log("is logged in", isLoggedIn)
 })
 
@@ -34,6 +36,8 @@ export const io = new Server(server, {
     origin: 'http://localhost:3000'
   }
 })
+
+startQueue(io)
 
 app.use('/auth', routerSpotifyAuthentication)
 app.use('/admin', adminLogin)

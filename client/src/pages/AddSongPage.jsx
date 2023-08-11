@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from "react";
-import { Search } from "../components/Search";
-import { Track } from "../components/Track";
-import { io } from 'socket.io-client';
+import {Search} from "../components/Search";
+import {Track} from "../components/Track";
+import {io} from 'socket.io-client';
 
 
 const AddSongPage = () => {
@@ -12,57 +12,44 @@ const AddSongPage = () => {
     useEffect(() => {
         socketRef.current = io('http://localhost:8080');
 
-        socketRef.current.on('connect', () => console.log(socketRef.current.id));
+        // socketRef.current.on('connect', () => console.log(socketRef.current.id));
+
+        socketRef.current.on('addedSongResponse', (data) => {
+            console.log(data)
+        })
 
         socketRef.current.on('addToQueue', (data) => {
-            console.log(data);
+            console.log(data)
             setTrack(data);
         });
-        const handleClick = (data) => {
-            if (socketRef.current) {
-                socketRef.current.emit('buttonClick', data); // whatever event you want to emit on button click
-            }
-        }
-    async function addQueue(trackId){
-        const promise = fetch(`http://localhost:8080/queue/?uri=spotify:track:${trackId}`, {
-            method: "POST"
-        })
-        const result = await promise
-        switch(result.status){
-            case 204:
-                alert("Song added to queue")
-                const data = await result.json();
-                setTrack(data);
-                break
-            case 404:
-                alert("404 - Backend not logged in")
-                break
-            case 429:
-                alert("429 - No more requests - wait for some time")
-                break
-            default:
-                alert("ERROR")
+    })
+
+    const handleClick = (data) => {
+        if (socketRef.current) {
+            socketRef.current.emit('addSong', data); // whatever event you want to emit on button click
         }
     }
 
+
     return (
-        <div className="w-screen h-full overflow-x-hidden overflow-y-scroll grid grid-cols-[1fr_minmax(0,1000px)_1fr] items-center place-content-center bg-neutral-800 text-white">
+        <div
+            className="w-screen h-full overflow-x-hidden overflow-y-scroll grid grid-cols-[1fr_minmax(0,1000px)_1fr] items-center place-content-center bg-neutral-800 text-white">
             <main className="flex flex-col justify-center items-center col-[2/3] p-4">
-                <section className="flex flex-col">          
+                <section className="flex flex-col">
                     <h1 className="text-center text-4xl mb-4">Add a track</h1>
-                </section>   
+                </section>
                 <section className="flex flex-col gap-8">
-                    <Search search={search} setSearch={setSearch} />
+                    <Search search={search} setSearch={setSearch}/>
                     <ul className="flex flex-col gap-8">
-                        {search !== "" ? search.map((trackInfo) => (
+                        {search !== "" ? search.map((trackInfo, index) => (
                             <li className="flex items-center justify-between gap-4">
-                                <Track key={trackInfo.id} {...trackInfo} />
-                                <button onClick={() => handleClick(trackInfo.id)}>Add</button>
+                                <Track key={index} {...trackInfo} />
+                                <button onClick={() => handleClick(trackInfo)}>Add</button>
                             </li>
                         )) : "Chould not get track"}
                     </ul>
                 </section>
-            </main>            
+            </main>
         </div>
     )
 }

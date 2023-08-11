@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {Link} from "react-router-dom";
 import {Track} from "../components/Track";
 // import {socket} from "../socket";
@@ -7,19 +7,24 @@ import { io } from 'socket.io-client';
 export const Queue = () => {
     const [queue, setQueue] = useState([]);
 
+    const socketRef = useRef();
+
     useEffect(()=> {
-        const socket = io('http://localhost:8080');
+        //const socketRef =
+        socketRef.current = io('http://localhost:8080');
 
-        socket.on('connect', ()=> console.log(socket.id))
+        socketRef.current.emit("loadQueue")
 
-        socket.on('queue', (data)=> {
-            console.log(data)
-            // setQueue(data)
+        socketRef.current.on('disconnect', ()  => console.log('server disconnected'))
+
+        socketRef.current.on("queue", (data) => {
+            console.log("loading queue data")
+            setQueue(data)
         })
-
-        socket.on('disconnect', ()=> console.log('server disconnected'))
     }, [])
-    
+
+
+
     return (
         <>
             {queue.message !== "Bad or expired token" ? (
@@ -27,20 +32,20 @@ export const Queue = () => {
                 {queue !== "" ? queue.map((trackInfo) => (
                     <li className="flex items-center gap-4 bg-neutral-600 p-4 rounded-md">
                         <Track key={trackInfo.id} {...trackInfo} />
-                        {/* <div className="flex items-center gap-2">                        
+                        {/* <div className="flex items-center gap-2">
                             <p className="text-center font-black">12</p>
-                            <div className="flex flex-col gap-2">                        
+                            <div className="flex flex-col gap-2">
                                 <button className="py-[0.4rem] px-3 hover:bg-neutral-800 rounded-full">&uarr;</button>
                                 <button className="py-[0.4rem] px-3 hover:bg-neutral-800 rounded-full">&darr;</button>
                             </div>
                         </div> */}
                     </li>
                 )) : "Chould not get track"}
-                </ul>) : 
+                </ul>) :
                 (<ul className="">
                     You need to <Link to="/admin" className="underline">login</Link>
-                </ul>)  
-            }     
+                </ul>)
+            }
         </>
     )
 }

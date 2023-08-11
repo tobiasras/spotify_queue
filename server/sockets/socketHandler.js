@@ -1,18 +1,39 @@
-import {io} from "../app.js";
+import {addSongToQueue, startQueue} from "../Queue/queue.js";
+import db from '../database/mongodb.js'
 
 export const socketHandler = (io) => {
-    io.on("connection", (socket) => {        
-        socket.emit("queue", "--- test queue ---");
+    io.on("connection", (socket) => {
+        socket.on('buttonClick', (data) => {
+            socket.emit('addToQueue', data);
+        })
+
+        socket.on('addSong', async (data) => {
+            try {
+                const response = await addSongToQueue(data)
+                socket.emit("addedSongResponse", response)
+            } catch (errorMessage) {
+                /*
+                Types of error messages:
+                    "database error"
+                    "song banned"
+                    "multiple songs"
+                    "spotify status, ####"
+                 */
+                socket.emit("addedSongResponse", errorMessage)
+            }
+        })
+
+        socket.on('loadQueue', async () => {
+            try {
+                const result = await db.queue.find()
+                socket.emit("queue", await result.toArray())
+            } catch (e){
+                console.log(e, "error in database")
+            }
+        })
+
     });
 }
-
-io.on('connection', async socket => {
-    console.log('addToQueue')
-    socket.on('buttonClick', (data) => {
-        console.log(data)
-        socket.emit('addToQueue', data);
-    })
-});
 
 
 // })
@@ -23,6 +44,8 @@ io.on('connection', async socket => {
 //     // socket.emit('playing', playing);
 //   })
 // })
+
+
 // io.on('connection', async socket => {
 //   console.log('play')
 //   socket.on('play', (play) => {
@@ -30,6 +53,8 @@ io.on('connection', async socket => {
 //     // socket.emit('play', play);
 //   })
 // })
+
+
 // io.on('connection', async socket => {
 //   console.log('nextTrack')
 //   socket.on('nextTrack', (nextTrack) => {
@@ -37,6 +62,8 @@ io.on('connection', async socket => {
 //     // socket.emit('nextTrack', nextTrack);
 //   })
 // })
+
+
 // io.on('connection', async socket => {
 //   console.log('prevTrack')
 //   socket.on('prevTrack', (prevTrack) => {

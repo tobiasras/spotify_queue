@@ -4,7 +4,6 @@ export const Search = (props) => {
     const [timer, setTimer] = useState(0)
 
     function getSearch(e) {
-        // console.log(e)
         clearTimeout(timer)
         setTimer(setTimeout(async function(){
             console.log("searching for tracks")
@@ -12,7 +11,6 @@ export const Search = (props) => {
             method: "GET"
             });
             const dataSearch = await connSearch.json();
-            // console.log(dataSearch)
             props.setSearch(dataSearch)
         }, 1000))
     }
