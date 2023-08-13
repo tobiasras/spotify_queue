@@ -9,7 +9,7 @@ import {socketHandler} from './sockets/socketHandler.js'
 import {Server} from 'socket.io'
 import {checkIfLoggedInBefore} from "./spotify/authentication/spotifyAccessToken.js";
 import {devmode} from "./spotify/util/devmode.js";
-import {skipSong, startQueue, stopQueue} from "./Queue/queue.js";
+import {skipSong, startQueue, stopQueue} from "./queue/queue.js";
 
 const app = express()
 

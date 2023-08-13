@@ -1,4 +1,4 @@
-import {addSongToQueue, startQueue} from "../Queue/queue.js";
+import {addSongToQueue, startQueue} from "../queue/queue.js";
 import db from '../database/mongodb.js'
 
 export const socketHandler = (io) => {

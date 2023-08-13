@@ -1,7 +1,10 @@
 import MusicPlayer from "./Parts/MusicPlayer";
 import SpotifyAuth from "./Parts/SpotifyAuth";
+import {useState} from "react";
 
 const AdminPanel = () => {
+    const spotifyAccountConnectedUseState = useState(false)
+
     return (
         <div className="">
             <div className="mb-5 text-gray-400">
@@ -12,12 +15,16 @@ const AdminPanel = () => {
             </div>
 
             <div className="mt-4">
-                <MusicPlayer/>
+                <SpotifyAuth spotifyAccountConnectedUseState={spotifyAccountConnectedUseState} />
             </div>
 
-            <div className="mt-4">
-                <SpotifyAuth/>
-            </div>
+
+            { spotifyAccountConnectedUseState[0] &&
+                <div className="mt-4">
+                    <MusicPlayer/>
+                </div>
+            }
+
         </div>
     )
 }
