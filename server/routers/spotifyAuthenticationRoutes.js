@@ -1,11 +1,35 @@
 import querystring from 'querystring'
-import { getAccessToken } from '../spotify/authentication/spotifyAccessToken.js'
-
+import {clearToken, getAccessToken} from '../spotify/authentication/spotifyAccessToken.js'
 import express from 'express'
 import {fetchSpotifyToken} from "../spotify/authentication/fetchSpotifyToken.js";
 
-const routerSpotifyAuthentication = express.Router()
+const routerSpotifyAuthentication = express.Router() // URL : /auth/***
 
+
+routerSpotifyAuthentication.get('/login', (req, res) => {
+  const redirectLink = 'https://accounts.spotify.com/authorize?' +
+      querystring.stringify({
+        response_type: 'code',
+        client_id: process.env.SPOTIFY_CLIENT_ID,
+        scope: 'user-modify-playback-state ' + 'user-read-private ' + 'user-read-email ' + 'user-read-playback-state',
+        redirect_uri: process.env.SPOTIFY_CLIENT_CALLBACK_URL
+      })
+
+  res.send({
+    redirectLink
+  })
+})
+
+routerSpotifyAuthentication.get('/logout', (req, res) => {
+  clearToken()
+  res.sendStatus(204)
+})
+
+
+/**
+ * USED BY FRONTEND TO CHECK IF A SPOTIFY ACCOUNT IS CONNECTED
+ * SENDS NAME OF SPOTIFY ACCOUNT OWNER
+ */
 routerSpotifyAuthentication.get('/state', async (req, res) => {
   if (!await getAccessToken()) {
     const response = {
@@ -24,19 +48,6 @@ routerSpotifyAuthentication.get('/state', async (req, res) => {
   }
 })
 
-routerSpotifyAuthentication.get('/login', function (req, res) {
-  const redirectLink = 'https://accounts.spotify.com/authorize?' +
-        querystring.stringify({
-          response_type: 'code',
-          client_id: process.env.SPOTIFY_CLIENT_ID,
-          scope: 'user-modify-playback-state ' + 'user-read-private ' + 'user-read-email ' + 'user-read-playback-state',
-          redirect_uri: process.env.SPOTIFY_CLIENT_CALLBACK_URL
-        })
-
-  res.send({
-    redirectLink
-  })
-})
 
 routerSpotifyAuthentication.get('/callback', async (req, res) => {
   const code = req.query.code || null
