@@ -24,7 +24,6 @@ export function skipSong(socket) {
     songCycle(0, socket) // 0, because no song is playing
 }
 
-
 export function stopQueue() {
     clearTimeout(currentTimeout)
     spotifyPlayer.pause()
@@ -34,12 +33,12 @@ export function stopQueue() {
 
 function songCycle(length, socket) {
     console.log(`songCycle - length: ${length}`)
-
     db.queue.find().toArray().then((currentQueue) => {
         socket.emit("queue", currentQueue)
     })
 
     currentTimeout = setTimeout(async () => {
+
         try {
             let result = await db.queue.findOneAndDelete({}, {sort: {_id: 1}}); // DELETES SONG AFTER FETCH
             let newTrack = result.value
@@ -58,18 +57,22 @@ function songCycle(length, socket) {
 
             console.log(`next song:  ${newTrack.name}`)
             songCycle(newTrack.duration_ms, socket)
+
         } catch {
             return "spotify has stopped"
         }
+
     }, length)
 }
+
 
 export function addSongToQueue(track) {
     return new Promise(async (resolve, reject) => {
         // CHECK IF SONG IS IN BANNED LIST
         try {
-            const result = await db.bannedSongs.findOne({id: track.id})
+            const result = await db.bannedSongs.findOne({uri: track.uri})
             if (result) {
+                console.log("song is banned")
                 reject("song banned")
             }
         } catch (e) {
@@ -79,9 +82,11 @@ export function addSongToQueue(track) {
 
         // CHECK IF SONG IS IN QUEUE
         try {
-            const result = await db.queue.findOne({id: track.id})
+            const result = await db.queue.findOne({uri: track.uri})
             if (result) {
+                console.log("multiple songs")
                 reject("multiple songs")
+                return
             }
         } catch (e) {
             console.log(e, "Error searching if song is in queue")
