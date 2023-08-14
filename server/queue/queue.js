@@ -3,8 +3,19 @@ import spotifyPlayer from "../spotify/player/spotifyPlayer.js";
 
 let currentTimeout
 
+/**
+    returns if queue is playing or not
+ */
+export function isQueuePlaying() {
+    if (currentTimeout){
+        // when using clearTimeout(currentTimeout) it does not set currentTimeout to null
+        // there is a field _destroyed (bool) if true the currenTimeout has been stopped
+        return !currentTimeout._destroyed
+    }
+    return false;
+}
+
 export function startQueue(socket) {
-    console.log("start queue is being run")
     songCycle(0, socket) // 0, because no song is playing
 }
 
@@ -13,11 +24,11 @@ export function skipSong(socket) {
     songCycle(0, socket) // 0, because no song is playing
 }
 
+
 export function stopQueue() {
     clearTimeout(currentTimeout)
-    spotifyPlayer.pause().then(value => {
-        console.log("stop queue:", value)
-    })
+    spotifyPlayer.pause()
+
 }
 
 
@@ -52,12 +63,6 @@ function songCycle(length, socket) {
         }
     }, length)
 }
-
-
-
-
-
-
 
 export function addSongToQueue(track) {
     return new Promise(async (resolve, reject) => {

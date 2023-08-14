@@ -1,19 +1,21 @@
 import './config/env.js'
+
 import express from 'express'
 import cors from 'cors'
-import routerSpotifyAuthentication from './routers/spotifyAuthentication.js'
-import adminLogin from './routers/adminLogin.js'
-import spotifySearch from './routers/spotifySearch.js'
 import http from "http"
 import {socketHandler} from './sockets/socketHandler.js'
 import {Server} from 'socket.io'
+
 import {checkIfLoggedInBefore} from "./spotify/authentication/spotifyAccessToken.js";
 import {devmode} from "./spotify/util/devmode.js";
-import {skipSong, startQueue, stopQueue} from "./queue/queue.js";
+
+import spotifyAuthenticationRoutes from './routers/spotifyAuthenticationRoutes.js'
+import adminRoutes from './routers/adminRoutes.js'
+import spotifyRoutes from './routers/spotifyRoutes.js'
+import queueRoutes from "./routers/queueRoutes.js"
+import {authenticateSecret} from "./middelware/adminAuthMiddelware.js";
 
 const app = express()
-
-
 
 // RUN SETTINGS
 const isDevMode = process.argv.indexOf('devmode') !== -1
@@ -30,7 +32,6 @@ checkIfLoggedInBefore().then((isLoggedIn) => {
 
 // SOCKETS
 const server = http.createServer(app)
-// const io = new Server(server)
 export const io = new Server(server, {
   cors: {
     origin: 'http://localhost:3000'
@@ -38,25 +39,10 @@ export const io = new Server(server, {
 })
 
 
-app.use('/auth', routerSpotifyAuthentication)
-app.use('/admin', adminLogin)
-app.use('/search', spotifySearch)
-
-app.get('/start', (req, res) => {
-  startQueue(io)
-  res.sendStatus(204);
-})
-
-app.get('/skip', (req, res) => {
-  skipSong(io)
-  res.sendStatus(204);
-})
-
-app.get('/stop', (req, res) => {
-  stopQueue()
-  res.sendStatus(204);
-})
-
+app.use('/auth', spotifyAuthenticationRoutes)
+app.use('/admin' ,adminRoutes)
+app.use('/search', spotifyRoutes)
+app.use('/queue', authenticateSecret , queueRoutes)
 
 
 isDevMode && devmode(app)

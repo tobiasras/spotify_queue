@@ -6,31 +6,37 @@ let refreshToken
 let expiresIn
 let createdAt
 
+
+/**
+ * USED WHEN LOGGING OUT OF A SPOTIFY ACCOUNT
+ */
+export function clearToken() {
+    accessToken = null
+    refreshToken = null
+    expiresIn = null
+    createdAt = null
+}
+
 export async function getAccessToken() {
     return new Promise(async (resolve, reject) => {
         if (!accessToken) {
             reject("not logged in")
+            return
         }
 
         if (isTokenExpired()) {
             await requestTokenWithRefreshToken()
-
             try {
                 await db.spotifyAccess.updateOne({username: process.env.USER},
                     {$set: { access_token: accessToken, creationTime: new Date() } })
             } catch (e) {
                 reject("could update token to database" + e)
             }
-
             resolve(accessToken)
         } else {
             resolve(accessToken)
         }
     })
-}
-
-export function isLoggedIn() {
-    return !!accessToken;
 }
 
 /**
@@ -39,7 +45,7 @@ export function isLoggedIn() {
 export async function checkIfLoggedInBefore() {
     const token = await db.spotifyAccess.findOne({username: process.env.USER})
     if (token) {
-        setValues(token)
+        setSpotifyTokensValues(token)
         return true
     } else {
         return false
@@ -47,7 +53,11 @@ export async function checkIfLoggedInBefore() {
 }
 
 function isTokenExpired() {
-    return new Date().getTime() > createdAt.getTime() + expiresIn * 60;
+    try {
+        return new Date().getTime() > createdAt.getTime() + expiresIn * 60;
+    } catch {
+        return null
+    }
 }
 
 async function requestTokenWithRefreshToken() {
@@ -55,10 +65,10 @@ async function requestTokenWithRefreshToken() {
     body.append('grant_type', 'refresh_token')
     body.append('refresh_token', refreshToken)
     const token = await fetchSpotifyToken(body)
-    setValues(token)
+    setSpotifyTokensValues(token)
 }
 
-function setValues(token) {
+export function setSpotifyTokensValues(token) {
     accessToken = token.access_token
     refreshToken = token.refresh_token
     expiresIn = token.expires_in

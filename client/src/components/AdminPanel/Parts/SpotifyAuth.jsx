@@ -7,8 +7,11 @@ const SpotifyAuth = (props) => {
 
     const logoutOfSpotify = async () => {
         const serverUrl = process.env.REACT_APP_SERVER_URL
-        const response = await fetch(`${serverUrl}/auth/logout`)
-        console.log(response)
+
+        fetch(`${serverUrl}/auth/logout`)
+
+        setLoginName("not connected")
+        setSpotifyAccountConnected(false)
     }
 
     const loginToSpotify = async () => {
@@ -23,12 +26,17 @@ const SpotifyAuth = (props) => {
         const response = fetch(`${serverUrl}/auth/state`)
         const result = await response
 
+        if (!result.ok){
+            return ""
+        }
+
         return await result.json()
     }
 
     useEffect(() => {
-        getConnectedSpotifyAccount().then(promise => {
-            const name = promise.display_name
+        getConnectedSpotifyAccount().then(result => {
+            const name = result.display_name
+
             if (name) {
                 setLoginName(name)
                 setSpotifyAccountConnected(true)

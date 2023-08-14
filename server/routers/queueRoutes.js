@@ -1,35 +1,27 @@
 import express from 'express'
-import {getQueueState, skipSong, startQueue, stopQueue} from "../queue/queue.js";
-import {io} from "../app.js";
+import {isQueuePlaying, skipSong, startQueue, stopQueue} from "../queue/queue.js";
+import { io } from "../app.js";
+import { authenticateSecret } from "../middelware/adminAuthMiddelware.js";
 
-const queueRouter = express.Router()
+const queueRoutes = express.Router()
 
-
-
-queueRouter.get('/state', (req, res) => {
-   getQueueState()
+queueRoutes.get('/state', (req, res) => {
+   res.send({"isPlaying": isQueuePlaying()});
 })
 
-queueRouter.get('/start', (req, res) => {
+queueRoutes.get('/start', (req, res) => {
    startQueue(io)
    res.sendStatus(204);
 })
 
-queueRouter.get('/skip', (req, res) => {
+queueRoutes.get('/skip', (req, res) => {
    skipSong(io)
    res.sendStatus(204);
 })
 
-queueRouter.get('/stop', (req, res) => {
+queueRoutes.get('/stop', (req, res) => {
    stopQueue()
-   res.sendStatus(204);
+   res.sendStatus(204)
 })
 
-
-
-
-
-
-
-
-export default router
+export default queueRoutes

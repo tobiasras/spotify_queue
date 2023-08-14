@@ -12,23 +12,35 @@ routerSearch.get('/', async (req, res) => {
     return
   }
   const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10`
-  const promise = fetch(url, {
-    headers: {
-      Authorization: 'Bearer ' + await getAccessToken()
-    }
-  })
-  const response = await promise
-  if (response.status !== 200) {
-    sendMessageByStatus(response.status, res)
-  } else {
-    const result = await response.json()
-    const trackList = []
-    const tracks = result.tracks.items
-    tracks.forEach(track => {
-      const filteredTrack = filterTrackObject(track)
-      trackList.push(filteredTrack)
+
+  try {
+    const accessToken = await getAccessToken()
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: 'Bearer ' + accessToken
+      }
     })
-    res.send(trackList)
+
+    if (response.status !== 200) {
+      sendMessageByStatus(response.status, res)
+    } else {
+      const result = await response.json()
+      const trackList = []
+      const tracks = result.tracks.items
+      tracks.forEach(track => {
+        const filteredTrack = filterTrackObject(track)
+        trackList.push(filteredTrack)
+      })
+      res.send(trackList)
+    }
+  } catch (e){
+    res.sendStatus(400)
   }
+
+
+
+
+
 })
 export default routerSearch

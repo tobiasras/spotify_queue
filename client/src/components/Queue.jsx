@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 import {Link} from "react-router-dom";
-import {Track} from "../components/Track";
-// import {socket} from "../socket";
+import {Track} from "./Track";
 import { io } from 'socket.io-client';
 
 export const Queue = () => {
@@ -18,7 +17,6 @@ export const Queue = () => {
         socketRef.current.on('disconnect', ()  => console.log('server disconnected'))
 
         socketRef.current.on("queue", (data) => {
-            console.log("loading queue data")
             setQueue(data)
         })
     }, [])

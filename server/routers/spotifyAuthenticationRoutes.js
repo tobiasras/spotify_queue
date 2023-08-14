@@ -1,7 +1,8 @@
 import querystring from 'querystring'
-import {clearToken, getAccessToken} from '../spotify/authentication/spotifyAccessToken.js'
+import {clearToken, getAccessToken, setSpotifyTokensValues} from '../spotify/authentication/spotifyAccessToken.js'
 import express from 'express'
 import {fetchSpotifyToken} from "../spotify/authentication/fetchSpotifyToken.js";
+import {isQueuePlaying, stopQueue} from "../queue/queue.js";
 
 const routerSpotifyAuthentication = express.Router() // URL : /auth/***
 
@@ -21,6 +22,9 @@ routerSpotifyAuthentication.get('/login', (req, res) => {
 })
 
 routerSpotifyAuthentication.get('/logout', (req, res) => {
+  if (isQueuePlaying()){
+    stopQueue()
+  }
   clearToken()
   res.sendStatus(204)
 })
@@ -30,26 +34,28 @@ routerSpotifyAuthentication.get('/logout', (req, res) => {
  * USED BY FRONTEND TO CHECK IF A SPOTIFY ACCOUNT IS CONNECTED
  * SENDS NAME OF SPOTIFY ACCOUNT OWNER
  */
+
+
 routerSpotifyAuthentication.get('/state', async (req, res) => {
-  if (!await getAccessToken()) {
-    const response = {
-      message: 'NO_ACCOUNT_CONNECTED'
-    }
-    res.send(response)
-  } else {
-    const response = fetch('https://api.spotify.com/v1/me', {
+
+
+  try {
+    const accessToken = await getAccessToken()
+
+    const result = await fetch('https://api.spotify.com/v1/me', {
       headers: {
-        Authorization: 'Bearer ' + await getAccessToken()
+        Authorization: 'Bearer ' + await accessToken
       }
     })
-
-    const result = await response
     res.send(await result.json())
+  } catch (e) {
+    res.sendStatus(400)
   }
 })
 
 
 routerSpotifyAuthentication.get('/callback', async (req, res) => {
+
   const code = req.query.code || null
   const requestTokenInfo = new URLSearchParams()
   requestTokenInfo.append('grant_type', 'authorization_code')
@@ -57,8 +63,11 @@ routerSpotifyAuthentication.get('/callback', async (req, res) => {
   requestTokenInfo.append('redirect_uri', process.env.SPOTIFY_CLIENT_CALLBACK_URL)
 
   const token = await fetchSpotifyToken(requestTokenInfo)
+
   token.username = process.env.USER
   token.creationTime = new Date()
+
+  setSpotifyTokensValues(token)
 
   res.redirect('http://localhost:3000/admin')
 })

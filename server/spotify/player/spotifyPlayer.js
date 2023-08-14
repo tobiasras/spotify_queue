@@ -14,9 +14,18 @@ import {filterTrackObject} from "../filters/trackObjectFilter.js";
  */
 export const state = () => {
     return new Promise(async (resolve, reject) => {
+        let token
+
+        try {
+            token = await getAccessToken()
+        } catch (e) {
+            reject(e)
+            return
+        }
+
         const response = await fetch('https://api.spotify.com/v1/me/player', {
             headers: {
-                Authorization: 'Bearer ' + await getAccessToken()
+                Authorization: 'Bearer ' + token
             }
         })
 
@@ -41,10 +50,19 @@ export const state = () => {
  */
 export const addSong = (trackUri) => {
     return new Promise(async (resolve, reject) => {
+        let token
+
+        try {
+            token = await getAccessToken()
+        } catch (e) {
+            reject(e)
+            return
+        }
+
         const response = await fetch('https://api.spotify.com/v1/me/player/queue/?uri=' + trackUri, {
             method: 'POST',
             headers: {
-                Authorization: 'Bearer ' + await getAccessToken()
+                Authorization: 'Bearer ' + token
             }
         })
 
@@ -63,10 +81,20 @@ export const addSong = (trackUri) => {
  */
 export const pause = () => {
     return new Promise(async (resolve, reject) => {
+
+        let token
+
+        try {
+            token = await getAccessToken()
+        } catch (e) {
+            reject(e)
+            return
+        }
+
         const response = await fetch('https://api.spotify.com/v1/me/player/pause', {
             method: 'PUT',
             headers: {
-                Authorization: 'Bearer ' + await getAccessToken()
+                Authorization: 'Bearer ' + token
             }
         })
 
@@ -85,10 +113,20 @@ export const pause = () => {
  */
 export const play = () => {
     return new Promise(async (resolve, reject) => {
+
+        let token
+
+        try {
+            token = await getAccessToken()
+        } catch (e) {
+            reject(e)
+            return
+        }
+
         const response = await fetch('https://api.spotify.com/v1/me/player/play', {
             method: 'PUT',
             headers: {
-                Authorization: 'Bearer ' + await getAccessToken()
+                Authorization: 'Bearer ' + token
             }
         })
 
@@ -107,10 +145,20 @@ export const play = () => {
  */
 export const previous = () => {
     return new Promise(async (resolve, reject) => {
+
+        let token
+
+        try {
+            token = await getAccessToken()
+        } catch (e) {
+            reject(e)
+            return
+        }
+
         const response = fetch('https://api.spotify.com/v1/me/player/previous', {
             method: 'POST',
             headers: {
-                Authorization: 'Bearer ' + await getAccessToken()
+                Authorization: 'Bearer ' + token
             }
         })
 
@@ -128,10 +176,19 @@ export const previous = () => {
  */
 export const next = () => {
     return new Promise(async (resolve, reject) => {
+        let token
+
+        try {
+            token = await getAccessToken()
+        } catch (e) {
+            reject(e)
+            return
+        }
+
         const response = await fetch('https://api.spotify.com/v1/me/player/next', {
             method: 'POST',
             headers: {
-                Authorization: 'Bearer ' + await getAccessToken()
+                Authorization: 'Bearer ' + token
             }
 
         })
