@@ -5,19 +5,14 @@ import {Track} from "./Track";
 export const Queue = (props) => {
     const [queue, setQueue] = useState([]);
 
-    const socketRef = props.socket
+    const socket = props.socket
 
     useEffect(()=> {
-        socketRef.current.emit("loadQueue")
-
-        socketRef.current.on("queue", (data) => {
+        socket.current.emit("loadQueue")
+        socket.current.on("queue", (data) => {
             setQueue(data)
         })
-    }, [])
-
-
-
-
+    }, [socket])
 
     return (
         <>

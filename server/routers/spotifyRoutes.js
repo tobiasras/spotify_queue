@@ -37,10 +37,5 @@ routerSearch.get('/', async (req, res) => {
   } catch (e){
     res.sendStatus(400)
   }
-
-
-
-
-
 })
 export default routerSearch

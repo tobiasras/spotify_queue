@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 const routerAdmin = express.Router()
 
-const saltRounds = 10;
+const saltRounds = 6;
 const myPlaintextPassword = process.env.SECRET_KEY
 
 routerAdmin.get('/:password', (req, res) => {

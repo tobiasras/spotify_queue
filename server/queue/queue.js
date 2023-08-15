@@ -4,11 +4,12 @@ import {io} from "../app.js";
 
 let currentTimeout
 export let currentTrack
+
 /**
-    returns if queue is playing or not
+ returns if queue is playing or not
  */
 export function isQueuePlaying() {
-    if (currentTimeout){
+    if (currentTimeout) {
         // when using clearTimeout(currentTimeout) it does not set currentTimeout to null
         // there is a field _destroyed (bool) if true the currenTimeout has been stopped
         return !currentTimeout._destroyed
@@ -35,33 +36,45 @@ export function stopQueue() {
 
 function songCycle(length, socket) {
     console.log(`songCycle - length: ${length}`)
+
     db.queue.find().toArray().then((currentQueue) => {
         socket.emit("queue", currentQueue)
     })
 
     currentTimeout = setTimeout(async () => {
-
         try {
             let result = await db.queue.findOneAndDelete({}, {sort: {_id: 1}}); // DELETES SONG AFTER FETCH
             let newTrack = result.value
+
             if (!newTrack) {
-                newTrack = await db.fallbackPlaylist.findOneAndUpdate(
-                    {},
-                    {$inc: {"amount_played": 1}},
-                    {sort: {"amount_played": 1},}
-                )
+                // NO SONGS IN QUEUE
+                // FALL BACK PLAYLIST IS NEEDED
+                 result = await db.fallbackPlaylist.findOneAndUpdate(
+                    {},  // your query
+                    {
+                        $set: {
+                            "last_played": new Date()
+                        }
+                    }, {
+                        sort: {"last_played": 1},
+                        returnOriginal: false
+                    }
+                );
+                newTrack = result.value
             }
+
             spotifyPlayer.addSong(newTrack.uri).then(() => {
-                    spotifyPlayer.next().then(() => {
-                        currentTrack = newTrack
-                        socket.emit("currentSong", currentTrack)
-                    })
+                spotifyPlayer.next().then(() => {
+                    currentTrack = newTrack
+                    socket.emit("currentSong", currentTrack)
+                })
             })
 
             console.log(`next song:  ${newTrack.name}`)
             songCycle(newTrack.duration_ms, socket)
 
-        } catch {
+        } catch (e) {
+            console.log(e)
             return "spotify has stopped"
         }
 

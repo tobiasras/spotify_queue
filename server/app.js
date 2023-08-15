@@ -13,7 +13,7 @@ import spotifyAuthenticationRoutes from './routers/spotifyAuthenticationRoutes.j
 import adminRoutes from './routers/adminRoutes.js'
 import spotifyRoutes from './routers/spotifyRoutes.js'
 import queueRoutes from "./routers/queueRoutes.js"
-import {authenticateSecret} from "./middelware/adminAuthMiddelware.js";
+import utilityRouter from "./routers/utilityRoutes.js";
 
 const app = express()
 
@@ -43,6 +43,8 @@ app.use('/auth', spotifyAuthenticationRoutes)
 app.use('/admin' ,adminRoutes)
 app.use('/search', spotifyRoutes)
 app.use('/queue', queueRoutes)
+
+app.use('/utility', utilityRouter) // dont use this in production
 
 
 isDevMode && devmode(app)

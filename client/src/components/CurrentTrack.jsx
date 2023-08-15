@@ -1,28 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import { Track } from "../components/Track"
 
 export const CurrentTrack = (props) => {
     const [track, setTrack] = useState({});
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const socketRef = props.socket
+    const socket = props.socket
 
     useEffect(()=> {
-        socketRef.current.emit('loadPlayerState')
+        socket.current.emit('loadPlayerState')
 
-
-        socketRef.current.on('playerState', (data) => {
+        socket.current.on('playerState', (data) => {
             setIsPlaying(data)
-            socketRef.current.emit("loadCurrentSong")
+            socket.current.emit("loadCurrentSong")
         });
 
-        socketRef.current.on("currentSong", (data) => {
+        socket.current.on("currentSong", (data) => {
             if (data !== null){
                 setTrack(data)
             }
         })
-
-    }, [])
+    }, [socket])
 
     return (
         <>
@@ -30,8 +28,8 @@ export const CurrentTrack = (props) => {
             {
                 isPlaying ? <Track key={track.id} {...track} />
                     :
-                    <div>
-                        <p>Spotify queuer is not playing</p>
+                    <div className="text-center text-gray-300">
+                        <p>Spotify queue is not playing</p>
                     </div>
             }
         </>

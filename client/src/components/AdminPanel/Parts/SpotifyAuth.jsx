@@ -49,17 +49,19 @@ const SpotifyAuth = (props) => {
         <div>
             <div>
                 <p className="text-gray-400">Spotify account: </p>
-                <p className="font-bold text-gray-400 mb-2">{loginName}</p>
+                <p className="font-bold text-gray-400 mb-3">{loginName}</p>
             </div>
 
             <div className="w-full rounded">
                 {spotifyAccountConnected ?
                     <button type="button" onClick={logoutOfSpotify}
-                            className="text-gray-500 bg-neutral-900 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center ">Logout
+                            className="text-gray-500 bg-neutral-900 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center ">
+                        Remove spotify account
                     </button>
                     :
                     <button type="button" onClick={loginToSpotify}
-                            className="text-gray-500 bg-neutral-900 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center ">Login
+                            className="text-gray-500 bg-neutral-900 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center ">
+                        Add spot. account
                     </button>
                 }
             </div>
