@@ -7,12 +7,19 @@ export const Queue = (props) => {
 
     const socket = props.socket
 
-    useEffect(()=> {
-        socket.current.emit("loadQueue")
-        socket.current.on("queue", (data) => {
-            setQueue(data)
-        })
-    }, [socket])
+    useEffect(() => {
+        const handleQueueUpdate = (data) => {
+            setQueue(data);
+        };
+
+        socket.current.emit("loadQueue");
+        socket.current.on("queue", handleQueueUpdate);
+
+        return () => {
+            socket.current.off("queue", handleQueueUpdate); // Cleanup the listener
+        };
+    }, [socket]);
+
 
     return (
         <>

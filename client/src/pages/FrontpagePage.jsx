@@ -17,7 +17,6 @@ const FrontpagePage = () => {
 
         return () => {
             if (socketRef.current) {
-                console.log("disconectin socket")
                 socketRef.current.disconnect();
             }
         };

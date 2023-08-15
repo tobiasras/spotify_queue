@@ -1,5 +1,6 @@
 import {addSongToQueue, currentTrack, isQueuePlaying, startQueue} from "../queue/queue.js";
 import db from '../database/mongodb.js'
+import {io} from "../app.js";
 
 export const socketHandler = (io) => {
     io.on("connection", (socket) => {
@@ -11,6 +12,10 @@ export const socketHandler = (io) => {
             try {
                 const response = await addSongToQueue(data)
                 socket.emit("addedSongResponse", response)
+
+                db.queue.find().toArray().then((currentQueue) => {
+                    io.emit("queue", currentQueue)
+                })
             } catch (errorMessage) {
                 /*
                 Types of error messages:
@@ -19,9 +24,11 @@ export const socketHandler = (io) => {
                     "multiple songs"
                     "spotify status, ####"
                  */
+
                 socket.emit("addedSongResponse", errorMessage)
             }
         })
+
 
         socket.on("loadCurrentSong", () => {
             socket.emit("currentSong", currentTrack)
@@ -35,12 +42,9 @@ export const socketHandler = (io) => {
                 console.log(e, "error in database")
             }
         })
-
         socket.on("loadPlayerState", () => {
           socket.emit("playerState", isQueuePlaying())
         })
-
-
     });
 }
 
