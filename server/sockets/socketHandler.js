@@ -1,4 +1,4 @@
-import {addSongToQueue, startQueue} from "../queue/queue.js";
+import {addSongToQueue, currentTrack, isQueuePlaying, startQueue} from "../queue/queue.js";
 import db from '../database/mongodb.js'
 
 export const socketHandler = (io) => {
@@ -23,6 +23,10 @@ export const socketHandler = (io) => {
             }
         })
 
+        socket.on("loadCurrentSong", () => {
+            socket.emit("currentSong", currentTrack)
+        })
+
         socket.on('loadQueue', async () => {
             try {
                 const result = await db.queue.find()
@@ -31,6 +35,11 @@ export const socketHandler = (io) => {
                 console.log(e, "error in database")
             }
         })
+
+        socket.on("loadPlayerState", () => {
+          socket.emit("playerState", isQueuePlaying())
+        })
+
 
     });
 }

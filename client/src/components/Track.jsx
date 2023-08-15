@@ -1,6 +1,7 @@
 import React from "react";
 
 export const Track = (props) => {
+
     return (
         <>
             <article id={`stackId${props.id}`} className="flex gap-4 items-center w-full">

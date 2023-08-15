@@ -42,7 +42,7 @@ export const io = new Server(server, {
 app.use('/auth', spotifyAuthenticationRoutes)
 app.use('/admin' ,adminRoutes)
 app.use('/search', spotifyRoutes)
-app.use('/queue', authenticateSecret , queueRoutes)
+app.use('/queue', queueRoutes)
 
 
 isDevMode && devmode(app)

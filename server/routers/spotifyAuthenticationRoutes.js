@@ -34,11 +34,7 @@ routerSpotifyAuthentication.get('/logout', (req, res) => {
  * USED BY FRONTEND TO CHECK IF A SPOTIFY ACCOUNT IS CONNECTED
  * SENDS NAME OF SPOTIFY ACCOUNT OWNER
  */
-
-
 routerSpotifyAuthentication.get('/state', async (req, res) => {
-
-
   try {
     const accessToken = await getAccessToken()
 

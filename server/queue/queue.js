@@ -1,8 +1,9 @@
 import db from '../database/mongodb.js'
 import spotifyPlayer from "../spotify/player/spotifyPlayer.js";
+import {io} from "../app.js";
 
 let currentTimeout
-
+export let currentTrack
 /**
     returns if queue is playing or not
  */
@@ -16,6 +17,7 @@ export function isQueuePlaying() {
 }
 
 export function startQueue(socket) {
+    io.emit("playerState", true)
     songCycle(0, socket) // 0, because no song is playing
 }
 
@@ -27,7 +29,7 @@ export function skipSong(socket) {
 export function stopQueue() {
     clearTimeout(currentTimeout)
     spotifyPlayer.pause()
-
+    io.emit("playerState", false)
 }
 
 
@@ -50,8 +52,9 @@ function songCycle(length, socket) {
                 )
             }
             spotifyPlayer.addSong(newTrack.uri).then(() => {
-                    spotifyPlayer.next().then(value => {
-                        console.log("next song:", value)
+                    spotifyPlayer.next().then(() => {
+                        currentTrack = newTrack
+                        socket.emit("currentSong", currentTrack)
                     })
             })
 
@@ -64,7 +67,6 @@ function songCycle(length, socket) {
 
     }, length)
 }
-
 
 export function addSongToQueue(track) {
     return new Promise(async (resolve, reject) => {

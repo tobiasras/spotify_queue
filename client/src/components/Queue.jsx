@@ -1,25 +1,21 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
 import {Track} from "./Track";
-import { io } from 'socket.io-client';
 
-export const Queue = () => {
+export const Queue = (props) => {
     const [queue, setQueue] = useState([]);
 
-    const socketRef = useRef();
+    const socketRef = props.socket
 
     useEffect(()=> {
-        //const socketRef =
-        socketRef.current = io('http://localhost:8080');
-
         socketRef.current.emit("loadQueue")
-
-        socketRef.current.on('disconnect', ()  => console.log('server disconnected'))
 
         socketRef.current.on("queue", (data) => {
             setQueue(data)
         })
     }, [])
+
+
 
 
 
