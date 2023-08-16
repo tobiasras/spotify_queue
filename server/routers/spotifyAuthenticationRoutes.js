@@ -66,7 +66,7 @@ routerSpotifyAuthentication.get('/api/auth/callback', async (req, res) => {
 
   setSpotifyTokensValues(token)
 
-  res.redirect('http://localhost:3000/admin')
+  res.redirect('/admin')
 })
 
 
