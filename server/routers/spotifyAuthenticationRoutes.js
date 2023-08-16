@@ -45,6 +45,7 @@ routerSpotifyAuthentication.get('/api/auth/state', async (req, res) => {
     })
     res.send(await result.json())
   } catch (e) {
+    console.log("THROW IN /API/AUTH/STATE \n", e)
     res.sendStatus(400)
   }
 })
