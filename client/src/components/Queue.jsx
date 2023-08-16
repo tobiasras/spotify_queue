@@ -23,12 +23,12 @@ export const Queue = (props) => {
     return (
         <>
             {queue.message !== "Bad or expired token" ? (
-                <ul className="flex flex-col gap-8">
+                <ul className="flex flex-col gap-4">
                     {queue !== ""
                         ? queue.map((trackInfo, index) => (
                               <li
                                   key={index}
-                                  className="flex items-center gap-4 bg-neutral-600 p-4 rounded-md"
+                                  className="flex items-center"
                               >
                                   <Track key={trackInfo.id} {...trackInfo} />
                                   {/* <div className="flex items-center gap-2">

@@ -21,26 +21,26 @@ const FrontpagePage = () => {
             }
         };
     }, []);
-
+    
     return (
         <BaseLayout>
             {isConnected ? (
-                <>
-                    <section className="bg-gradient-to-b from-yellow-500 to-neutral-800">
-                        <h2 className="text-3xl">Playing now</h2>
+                <section>
+                    <h1 className="text-4xl">Queue</h1>
+                    {/* bg-gradient-to-b from-yellow-500 to-neutral-800 */}
+                    <article className="">
+                        <h2 className="text-2xl text-neutral-400">Now playing</h2>
                         <CurrentTrack socket={socketRef} />
+                    </article>
 
-                        {/* <section className="flex flex-col gap-4 bg-neutral-700 p-4 rounded-md">
-                        </section> */}
-                    </section>
-                    <section className="flex flex-col gap-4 bg-neutral-700 p-4 rounded-md mt-14">
-                        <h2 className="text-3xl mb-4">Current queue</h2>
+                    <article className="flex flex-col gap-4 rounded-md mt-14">
+                        <h2 className="text-2xl text-neutral-400">Next in queue</h2>
                         <Queue socket={socketRef} />
-                    </section>{" "}
-                </>
+                    </article>{" "}
+                </section>
             ) : (
                 <div>
-                    <p>no connection</p>
+                    <p>No connection</p>
                 </div>
             )}
         </BaseLayout>
