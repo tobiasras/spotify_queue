@@ -10,7 +10,7 @@ const AddSongPage = () => {
     const socketRef = useRef();
 
     useEffect(() => {
-        socketRef.current = io('http://localhost:8080');
+        socketRef.current = io('/');
 
         // socketRef.current.on('connect', () => console.log(socketRef.current.id));
 

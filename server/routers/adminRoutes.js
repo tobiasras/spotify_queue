@@ -6,7 +6,7 @@ const routerAdmin = express.Router()
 const saltRounds = 6;
 const myPlaintextPassword = process.env.SECRET_KEY
 
-routerAdmin.get('/:password', (req, res) => {
+routerAdmin.get('/api/admin/:password', (req, res) => {
     if (req.params.password === process.env.SECRET_PASSWORD){
         bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
             res.send({"token": hash})

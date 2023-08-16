@@ -5,7 +5,7 @@ import { filterTrackObject } from '../spotify/filters/trackObjectFilter.js'
 
 const routerSearch = express.Router()
 
-routerSearch.get('/', async (req, res) => {
+routerSearch.get('/api/search', async (req, res) => {
   const query = req.query.q
   if (!query) {
     res.status(400).send('Search query is empty')

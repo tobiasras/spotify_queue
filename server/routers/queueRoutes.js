@@ -5,27 +5,27 @@ import { authenticateSecret } from "../middelware/adminAuthMiddelware.js";
 
 const queueRoutes = express.Router()
 
-queueRoutes.get('/state' , (req, res) => {
+queueRoutes.get('/api/queue/state' , (req, res) => {
    res.send({"isPlaying": isQueuePlaying()});
 })
 
-queueRoutes.get('/start', authenticateSecret , (req, res) => {
+queueRoutes.get('/api/queue/start', authenticateSecret , (req, res) => {
    startQueue(io)
    res.sendStatus(204);
 })
 
-queueRoutes.get('/skip', authenticateSecret , (req, res) => {
+queueRoutes.get('/api/queue/skip', authenticateSecret , (req, res) => {
    skipSong(io)
    res.sendStatus(204);
 })
 
-queueRoutes.get('/stop', authenticateSecret , (req, res) => {
+queueRoutes.get('/api/queue/stop', authenticateSecret , (req, res) => {
    stopQueue()
    res.sendStatus(204)
 })
 
 
-queueRoutes.get('/track', (req, res) => {
+queueRoutes.get('/api/queue/track', (req, res) => {
    if (isQueuePlaying()){
       res.send(currentTrack)
    } else

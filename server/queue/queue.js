@@ -36,11 +36,9 @@ export function stopQueue() {
 
 function songCycle(length, socket) {
     console.log(`songCycle - length: ${length}`)
-
     db.queue.find().toArray().then((currentQueue) => {
         socket.emit("queue", currentQueue)
     })
-
     currentTimeout = setTimeout(async () => {
         try {
             let result = await db.queue.findOneAndDelete({}, {sort: {_id: 1}}); // DELETES SONG AFTER FETCH
@@ -70,11 +68,8 @@ function songCycle(length, socket) {
                 })
             })
 
-
-
             console.log(`next song:  ${newTrack.name}`)
             songCycle(newTrack.duration_ms, socket)
-
         } catch (e) {
             console.log(e)
             return "spotify has stopped"
@@ -82,6 +77,7 @@ function songCycle(length, socket) {
 
     }, length)
 }
+
 
 export function addSongToQueue(track) {
     return new Promise(async (resolve, reject) => {

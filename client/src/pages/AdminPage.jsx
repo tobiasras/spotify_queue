@@ -17,7 +17,7 @@ const AdminPage = () => {
 
     const login = async () => {
         console.log("password", password)
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/admin/${password}`)
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/admin/${password}`)
         if (!response?.ok) {
             setWrongPassword(true)
         } else {
