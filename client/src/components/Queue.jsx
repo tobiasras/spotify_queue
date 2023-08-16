@@ -12,11 +12,17 @@ export const Queue = (props) => {
             setQueue(data);
         };
 
-        socket.current.emit("loadQueue");
-        socket.current.on("queue", handleQueueUpdate);
+        // socket.current.emit("loadQueue");
+        // socket.current.on("queue", handleQueueUpdate);
+        // return () => socket.current.off("queue", handleQueueUpdate);
+
+        const socketCurr = socket.current
+
+        socketCurr.emit("loadQueue");
+        socketCurr.on("queue", handleQueueUpdate);
 
         return () => {
-            socket.current.off("queue", handleQueueUpdate); // Cleanup the listener
+            socketCurr.off("queue", handleQueueUpdate); // Cleanup the listener
         };
     }, [socket]);
 
@@ -26,10 +32,7 @@ export const Queue = (props) => {
                 <ul className="flex flex-col gap-4">
                     {queue !== ""
                         ? queue.map((trackInfo, index) => (
-                              <li
-                                  key={index}
-                                  className="flex items-center"
-                              >
+                              <li key={index} className="flex items-center">
                                   <Track key={trackInfo.id} {...trackInfo} />
                                   {/* <div className="flex items-center gap-2">
                                       <p className="text-center font-black">12</p>

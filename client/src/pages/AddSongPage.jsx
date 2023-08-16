@@ -6,7 +6,7 @@ import { BaseLayout } from "../layouts/BaseLayout";
 
 const AddSongPage = () => {
     const [search, setSearch] = useState([]);
-    const [track, setTrack] = useState();
+    const [setTrack] = useState();
     const socketRef = useRef();
 
     useEffect(() => {
