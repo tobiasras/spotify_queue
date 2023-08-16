@@ -14,7 +14,7 @@ function App() {
                 <Route path="addSong" element={<AddSongPage/>}/>
                 <Route path="info" element={<InfoPage/>}/>
             </Routes>
-            <Navbar/>
+            {/* <Navbar/> */}
         </BrowserRouter>
     )
 }

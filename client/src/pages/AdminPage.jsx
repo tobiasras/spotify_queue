@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import AdminPanel from "../components/AdminPanel/AdminPanel";
+import { BaseLayout } from "../layouts/BaseLayout";
 
 const AdminPage = () => {
     const [password, setPassword] = useState('')
@@ -28,7 +29,7 @@ const AdminPage = () => {
     }
 
     return (
-        <main className="w-full p-3">
+        <BaseLayout>
             {!isloggedIn &&
                 <>
                     <div className="text-gray-400 flex justify-center bg-neutral-700 rounded">
@@ -54,8 +55,7 @@ const AdminPage = () => {
                 </>
             }
             {isloggedIn && <AdminPanel/>}
-        </main>
-
+        </BaseLayout>
 
     )
 }
