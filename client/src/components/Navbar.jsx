@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export const Navbar = () => {
     const navItems = [
@@ -25,18 +25,21 @@ export const Navbar = () => {
             <ul className="flex justify-center font-medium">
                 {navItems.map((items, index) => (
                     <li key={index} className="w-32">
-                        <Link
+                        <NavLink
                             to={items.herf}
                             // hover:bg-neutral-950
-                            className="flex flex-col items-center justify-center p-2 group"
+                            className={({ isActive, isPending }) =>
+                                (isPending ? "pending" : isActive ? "active " : "") +
+                                "text-gray-500 flex flex-col items-center justify-center p-2 group"
+                            }
                         >
-                            <span className="w-6 h-6 text-gray-500 group-hover:text-white material-symbols-outlined">
+                            <span className="w-6 h-6 group-hover:text-white material-symbols-outlined">
                                 {items.iconName}
                             </span>
-                            <span className="text-sm text-gray-500 group-hover:text-white dark:group-hover:text-white">
+                            <span className="text-sm group-hover:text-white dark:group-hover:text-white">
                                 {items.herfName}
                             </span>
-                        </Link>
+                        </NavLink>
                     </li>
                 ))}
             </ul>
