@@ -1,7 +1,7 @@
 {
-  "name": "spotify_queue",
-  "version": "1.0.0",
-  "scripts": {
-    "start": "cd server && npm install && npm run production"
+  "name": "$name$",
+  "version": "$version$",
+  "dependencies": {
+    $END$
   }
 }
