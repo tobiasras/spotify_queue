@@ -1,0 +1,1 @@
+Searchbar on add song, should be stikey and follow the screen then scrolling.
