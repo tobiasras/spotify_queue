@@ -56,8 +56,8 @@ const AddSongPage = () => {
                 <ul className="flex flex-col gap-4">
                     {search !== ""
                         ? search.map((trackInfo, index) => (
-                              <li className="flex items-center justify-between gap-4 rounded-lg hover:bg-neutral-700">
-                                  <Track key={index} {...trackInfo} />
+                              <li key={index} className="flex items-center justify-between gap-4 rounded-lg hover:bg-neutral-700">
+                                  <Track {...trackInfo} />
                                   <button
                                       onClick={() => handleClick(trackInfo)}
                                       className="p-4 h-auto rounded-lg hover:text-neutral-900"
