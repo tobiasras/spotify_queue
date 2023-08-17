@@ -82,7 +82,7 @@ const ControlPanel = (props) => {
             setToast(
                 {
                     type: "success",
-                    text: "stopped queue"
+                    text: "Stopped queue"
                 }
             )
             setIsToastShowing(true)
@@ -99,18 +99,18 @@ const ControlPanel = (props) => {
 
                 {!isPlaying ?
                     <button type="button" onClick={startQueue}
-                            className="text-gray-500 bg-neutral-800  hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center ">
+                            className="text-neutral-400 bg-neutral-800  hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center ">
                         Start queue
                     </button>
                     :
                     <>
                         <button type="button" onClick={stopQueue}
-                                className="text-gray-500 bg-neutral-800  hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center ">
+                                className="text-neutral-400 bg-neutral-800  hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center ">
                             Stop queue
                         </button>
 
                         <button type="button" onClick={skipSong}
-                                className="text-gray-500 bg-neutral-800 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg pt-2 sm:w-auto px-5  text-center ">
+                                className="text-neutral-400 bg-neutral-800 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg pt-2 sm:w-auto px-5  text-center ">
                         <span className="material-symbols-outlined">
                             skip_next
                         </span>

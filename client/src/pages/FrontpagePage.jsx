@@ -26,9 +26,9 @@ const FrontpagePage = () => {
         <BaseLayout>
             {isConnected ? (
                 <section>
-                    <h1 className="text-4xl">Queue</h1>
+                    <h1 className="text-4xl font-semibold">Queue</h1>
                     {/* bg-gradient-to-b from-yellow-500 to-neutral-800 */}
-                    <article className="">
+                    <article className="flex flex-col gap-4 rounded-md">
                         <h2 className="text-2xl text-neutral-400">Now playing</h2>
                         <CurrentTrack socket={socketRef} />
                     </article>

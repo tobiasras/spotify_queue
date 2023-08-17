@@ -42,7 +42,7 @@ const AddSongPage = () => {
     return (
         <BaseLayout>
             <section>
-                <h1 className="text-4xl">Add a track</h1>
+                <h1 className="text-4xl font-semibold">Add a track</h1>
             </section>
             <section className="flex flex-col gap-4 relative">
                 <Search search={search} setSearch={setSearch} />
