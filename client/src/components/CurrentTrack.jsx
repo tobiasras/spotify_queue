@@ -25,20 +25,20 @@ export const CurrentTrack = (props) => {
     const noCurrentTrack = {
         id: "noCurrentTrack",
         images: [{ url: "/assets/images/white_square.svg" }],
-        name: "No track is playing",
+        name: "No tracks is playing",
         artists: [{ id: "noArtistfound", name: "No Artist Found" }],
     };
 
     return (
         <>
-            {/* {state ? <Track key={state.id} {...state.track} /> : null} */}
             {isPlaying ? (
-                <Track key={track.id} {...track} />
+                <div className="rounded-lg hover:bg-neutral-700">
+                    <Track key={track.id} {...track} />
+                </div>
             ) : (
-                <Track key={noCurrentTrack.id} {...noCurrentTrack} />
-                // <div className="text-center text-gray-300">
-                //     <p>Spotify queue is not playing</p>
-                // </div>
+                <div className="rounded-lg hover:bg-neutral-700">
+                    <Track key={noCurrentTrack.id} {...noCurrentTrack} />
+                </div>
             )}
         </>
     );
