@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import { ScrollToTop } from "../components/ScrollToTop";
 
 export const BaseLayout = ({ children }) => {
     return (
@@ -8,6 +9,7 @@ export const BaseLayout = ({ children }) => {
                 <main className="flex flex-col col-[2/3] gap-4 p-4">{children}</main>
             </div>
             <Navbar />
+            <ScrollToTop />
         </>
     );
 };
