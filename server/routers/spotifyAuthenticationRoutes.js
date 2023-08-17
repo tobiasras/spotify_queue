@@ -7,7 +7,7 @@ import {isQueuePlaying, stopQueue} from "../queue/queue.js";
 const routerSpotifyAuthentication = express.Router() // URL : /auth/***
 
 
-routerSpotifyAuthentication.get('/login', (req, res) => {
+routerSpotifyAuthentication.get('/api/auth/login', (req, res) => {
   const redirectLink = 'https://accounts.spotify.com/authorize?' +
       querystring.stringify({
         response_type: 'code',
@@ -21,7 +21,7 @@ routerSpotifyAuthentication.get('/login', (req, res) => {
   })
 })
 
-routerSpotifyAuthentication.get('/logout', (req, res) => {
+routerSpotifyAuthentication.get('/api/auth/logout', (req, res) => {
   if (isQueuePlaying()){
     stopQueue()
   }
@@ -34,7 +34,7 @@ routerSpotifyAuthentication.get('/logout', (req, res) => {
  * USED BY FRONTEND TO CHECK IF A SPOTIFY ACCOUNT IS CONNECTED
  * SENDS NAME OF SPOTIFY ACCOUNT OWNER
  */
-routerSpotifyAuthentication.get('/state', async (req, res) => {
+routerSpotifyAuthentication.get('/api/auth/state', async (req, res) => {
   try {
     const accessToken = await getAccessToken()
 
@@ -45,12 +45,13 @@ routerSpotifyAuthentication.get('/state', async (req, res) => {
     })
     res.send(await result.json())
   } catch (e) {
+    console.log("THROW IN /API/AUTH/STATE \n", e)
     res.sendStatus(400)
   }
 })
 
 
-routerSpotifyAuthentication.get('/callback', async (req, res) => {
+routerSpotifyAuthentication.get('/api/auth/callback', async (req, res) => {
 
   const code = req.query.code || null
   const requestTokenInfo = new URLSearchParams()
@@ -65,7 +66,7 @@ routerSpotifyAuthentication.get('/callback', async (req, res) => {
 
   setSpotifyTokensValues(token)
 
-  res.redirect('http://localhost:3000/admin')
+  res.redirect('/admin')
 })
 
 

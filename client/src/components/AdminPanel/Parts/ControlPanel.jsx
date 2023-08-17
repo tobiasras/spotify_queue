@@ -11,7 +11,7 @@ const ControlPanel = (props) => {
     }, [])
 
     async function requestIsPlaying() {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/queue/state`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/queue/state`, {
                 headers: {
                     authorization: `bearer ${sessionStorage.getItem("secret_key")}`
                 }
@@ -27,7 +27,7 @@ const ControlPanel = (props) => {
     }
 
     async function startQueue() {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/queue/start`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/queue/start`, {
             headers: {
                 authorization: `bearer ${sessionStorage.getItem("secret_key")}`
             }
@@ -49,7 +49,7 @@ const ControlPanel = (props) => {
     }
 
     async function skipSong() {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/queue/skip`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/queue/skip`, {
             headers: {
                 authorization: `bearer ${sessionStorage.getItem("secret_key")}`
             }
@@ -71,7 +71,7 @@ const ControlPanel = (props) => {
     }
 
     async function stopQueue() {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/queue/stop`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/queue/stop`, {
             headers: {
                 authorization: `bearer ${sessionStorage.getItem("secret_key")}`
             }

@@ -7,7 +7,7 @@ export const Search = (props) => {
         clearTimeout(timer)
         setTimer(setTimeout(async function(){
             console.log("searching for tracks")
-            const connSearch = await fetch(`http://localhost:8080/search/?q=${e}`, {
+            const connSearch = await fetch(`/api/search/?q=${e}`, {
             method: "GET"
             });
             const dataSearch = await connSearch.json();

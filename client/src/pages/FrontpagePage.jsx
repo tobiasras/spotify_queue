@@ -9,7 +9,7 @@ const FrontpagePage = () => {
     const [isConnected, setIsConnected] = useState(false);
 
     useEffect(() => {
-        socketRef.current = io("http://localhost:8080");
+        socketRef.current = io(`${process.env.REACT_APP_SERVER_URL}`);
 
         socketRef.current.on("connect", () => {
             setIsConnected(true);
