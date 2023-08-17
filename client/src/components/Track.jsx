@@ -4,7 +4,7 @@ export const Track = (props) => {
 
     return (
         <>
-            <article id={`stackId${props.id}`} className="flex p-4 gap-4 w-full overflow-x-scroll hover:bg-neutral-700 cursor-pointer">
+            <article id={`stackId${props.id}`} className="flex p-4 gap-4 w-full overflow-x-scroll cursor-pointer">
                 <img src={props.images?.[0]?.url} alt={props.name} className="w-16 h-16" />
                 <div className="flex flex-col justify-between">
                     <h4 className="text-xl whitespace-nowrap">{props.name}</h4>

@@ -32,8 +32,8 @@ export const Queue = (props) => {
                 <ul className="flex flex-col gap-4">
                     {queue !== ""
                         ? queue.map((trackInfo, index) => (
-                              <li key={index} className="flex items-center">
-                                  <Track key={trackInfo.id} {...trackInfo} />
+                              <li key={index} className="flex items-center rounded-lg hover:bg-neutral-700">
+                                  <Track key={trackInfo.id} {...trackInfo} />                                  
                                   {/* <div className="flex items-center gap-2">
                                       <p className="text-center font-black">12</p>
                                       <div className="flex flex-col gap-2">
