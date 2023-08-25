@@ -1,12 +1,14 @@
-import React, {useState, useEffect, useRef} from "react";
-import {Search} from "../components/Search";
-import {Track} from "../components/Track";
-import {io} from 'socket.io-client';
-
+import React, { useState, useEffect, useRef } from "react";
+import { Search } from "../components/Searchbar";
+import { Track } from "../components/Track";
+import { Popup } from "../components/Popup";
+import { io } from "socket.io-client";
+import { BaseLayout } from "../layouts/BaseLayout";
 
 const AddSongPage = () => {
     const [search, setSearch] = useState([]);
-    const [track, setTrack] = useState();
+    const [timedPopup, setTimedPopup] = useState(false);
+    const [setTrack] = useState();
     const socketRef = useRef();
 
     useEffect(() => {
@@ -14,44 +16,61 @@ const AddSongPage = () => {
 
         // socketRef.current.on('connect', () => console.log(socketRef.current.id));
 
-        socketRef.current.on('addedSongResponse', (data) => {
-            console.log(data)
-        })
+        socketRef.current.on("addedSongResponse", (data) => {
+            console.log(data);
+        });
 
-        socketRef.current.on('addToQueue', (data) => {
-            console.log(data)
+        socketRef.current.on("addToQueue", (data) => {
+            console.log(data);
             setTrack(data);
         });
-    })
+    });
+
+    // useEffect(() => {
+    //     setTimeout(()=> {
+    //         setTimedPopup(true)
+    //     }, 3000)
+    // }, []);
 
     const handleClick = (data) => {
         if (socketRef.current) {
-            socketRef.current.emit('addSong', data); // whatever event you want to emit on button click
+            socketRef.current.emit("addSong", data); // whatever event you want to emit on button click
         }
-    }
-
+        setTimedPopup(true);
+    };
 
     return (
-        <div
-            className="w-screen h-full overflow-x-hidden overflow-y-scroll grid grid-cols-[1fr_minmax(0,1000px)_1fr] items-center place-content-center bg-neutral-800 text-white">
-            <main className="flex flex-col justify-center items-center col-[2/3] p-4">
-                <section className="flex flex-col">
-                    <h1 className="text-center text-4xl mb-4">Add a track</h1>
-                </section>
-                <section className="flex flex-col gap-8">
-                    <Search search={search} setSearch={setSearch}/>
-                    <ul className="flex flex-col gap-8">
-                        {search !== "" ? search.map((trackInfo, index) => (
-                            <li className="flex items-center justify-between gap-4">
-                                <Track key={index} {...trackInfo} />
-                                <button onClick={() => handleClick(trackInfo)}>Add</button>
-                            </li>
-                        )) : "Chould not get track"}
-                    </ul>
-                </section>
-            </main>
-        </div>
-    )
-}
+        <BaseLayout>
+            <section>
+                <h1 className="text-4xl font-semibold">Add a track</h1>
+            </section>
+            <section className="flex flex-col gap-4 relative">
+                <Search search={search} setSearch={setSearch} />
+                <Popup trigger={timedPopup} setTrigger={setTimedPopup}>
+                    <p>Added to queue</p>
+                </Popup>
 
-export default AddSongPage
+                
+
+                {/* Add loading state */}
+                <ul className="flex flex-col gap-4">
+                    {search !== ""
+                        ? search.map((trackInfo, index) => (
+                              <li key={index} className="flex items-center justify-between gap-4 rounded-lg hover:bg-neutral-700">
+                                  <Track {...trackInfo} />
+                                  <button
+                                      onClick={() => handleClick(trackInfo)}
+                                      className="p-4 h-auto rounded-lg hover:text-neutral-900"
+                                  >
+                                      Add
+                                  </button>
+                              </li>
+                          ))
+                        : "Chould not get track"}
+                </ul>
+            </section>
+        </BaseLayout>
+    );
+};
+
+export default AddSongPage;

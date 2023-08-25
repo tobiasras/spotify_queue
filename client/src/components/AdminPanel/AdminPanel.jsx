@@ -10,8 +10,8 @@ const AdminPanel = () => {
     return (
         <div className="">
 
-            <div className="mb-5 text-gray-400">
-                <h1 className="text-3xl font-bold" >Admin page</h1>
+            <div className="mb-5 text-neutral-400">
+                <h1 className="text-4xl font-semibold text-white" >Admin page</h1>
                 <p>
                     A web page to controll the guldbar playlist
                 </p>

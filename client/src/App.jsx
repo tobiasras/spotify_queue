@@ -3,7 +3,6 @@ import FrontpagePage from "./pages/FrontpagePage";
 import AdminPage from "./pages/AdminPage";
 import InfoPage from "./pages/InfoPage";
 import AddSongPage from "./pages/AddSongPage";
-import Navbar from "./components/Navbar";
 
 function App() {
     return (
@@ -14,7 +13,6 @@ function App() {
                 <Route path="addSong" element={<AddSongPage/>}/>
                 <Route path="info" element={<InfoPage/>}/>
             </Routes>
-            <Navbar/>
         </BrowserRouter>
     )
 }

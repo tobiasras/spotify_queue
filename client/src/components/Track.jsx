@@ -4,13 +4,13 @@ export const Track = (props) => {
 
     return (
         <>
-            <article id={`stackId${props.id}`} className="flex gap-4 items-center w-full">
-                <img src={props.images?.[0]?.url} alt={props.name} className="w-16 min-w-[3rem] rounded-md" />
-                <div>
-                    <h4 className="text-xl">{props.name}</h4>
-                    <div className="flex gap-4">
+            <article id={`stackId${props.id}`} className="flex p-4 gap-4 w-full overflow-x-scroll cursor-pointer">
+                <img src={props.images?.[0]?.url} alt={props.name} className="w-16 h-16" />
+                <div className="flex flex-col justify-between">
+                    <h4 className="text-xl whitespace-nowrap">{props.name}</h4>
+                    <div className="flex gap-4 whitespace-nowrap">
                         {props.artists?.map(((artist)=> (
-                            <p key={artist.id} className="text-sm text-gray-400">{artist.name}</p>
+                            <p key={artist.id} className="text-lg text-gray-400">{artist.name}</p>
                         )))}
                     </div>
                 </div>
