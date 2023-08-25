@@ -42,8 +42,11 @@ export async function getAccessToken() {
 /**
  * Checks database if a token exist in database
  */
+
 export async function checkIfLoggedInBefore() {
+
     const token = await db.spotifyAccess.findOne({username: process.env.USER_PROFILE})
+
     if (token) {
         setSpotifyTokensValues(token)
         return true
