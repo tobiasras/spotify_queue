@@ -1,9 +1,12 @@
 import dotenv from 'dotenv'
+import log from "../logger/logger.js";
 
-const isDevMode = process.argv.indexOf('production') !== -1
+const isProduction = process.argv.indexOf('production') !== -1
 
-if (isDevMode){
-    dotenv.config({path: './.env'})
+log.info({label: "startup", message: `is production: ${isProduction}`})
+
+if (isProduction) {
+    dotenv.config({path: '../.env'})
 } else {
     dotenv.config({path: './.env'})
 }

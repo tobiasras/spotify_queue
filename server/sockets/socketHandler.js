@@ -1,6 +1,7 @@
 import {addSongToQueue, currentTrack, isQueuePlaying, startQueue} from "../queue/queue.js";
 import db from '../database/mongodb.js'
 import {io} from "../app.js";
+import log from "../logger/logger.js";
 
 export const socketHandler = (io) => {
     io.on("connection", (socket) => {
@@ -10,79 +11,35 @@ export const socketHandler = (io) => {
 
         socket.on('addSong', async (data) => {
             try {
+                log.info({label: "Queue", message: `Song added to queue`})
                 const response = await addSongToQueue(data)
                 socket.emit("addedSongResponse", response)
 
-                db.queue.find().toArray().then((currentQueue) => {
-                    io.emit("queue", currentQueue)
-                })
+                const currentQueue = await db.queue.find().toArray()
+                io.emit("queue", currentQueue)
             } catch (errorMessage) {
-                /*
-                Types of error messages:
-                    "database error"
-                    "song banned"
-                    "multiple songs"
-                    "spotify status, ####"
-                 */
-
+                log.warn({label: "Queue", message: `error adding song to queue: ${errorMessage}`})
                 socket.emit("addedSongResponse", errorMessage)
             }
         })
-
 
         socket.on("loadCurrentSong", () => {
             socket.emit("currentSong", currentTrack)
         })
 
+
         socket.on('loadQueue', async () => {
             try {
                 const result = await db.queue.find()
                 socket.emit("queue", await result.toArray())
-            } catch (e){
+            } catch (e) {
                 console.log(e, "error in database")
             }
         })
+
+
         socket.on("loadPlayerState", () => {
-          socket.emit("playerState", isQueuePlaying())
+            socket.emit("playerState", isQueuePlaying())
         })
     });
 }
-
-
-// })
-// io.on('connection', async socket => {
-//   console.log('playing')
-//   socket.on('playing', (playing) => {
-//     console.log(playing)
-//     // socket.emit('playing', playing);
-//   })
-// })
-
-
-// io.on('connection', async socket => {
-//   console.log('play')
-//   socket.on('play', (play) => {
-//     console.log(play)
-//     // socket.emit('play', play);
-//   })
-// })
-
-
-// io.on('connection', async socket => {
-//   console.log('nextTrack')
-//   socket.on('nextTrack', (nextTrack) => {
-//     console.log(nextTrack)
-//     // socket.emit('nextTrack', nextTrack);
-//   })
-// })
-
-
-// io.on('connection', async socket => {
-//   console.log('prevTrack')
-//   socket.on('prevTrack', (prevTrack) => {
-//     console.log(prevTrack)
-//     // socket.emit('prevTrack', prevTrack);
-//   })
-// })
-
-// ROUTES

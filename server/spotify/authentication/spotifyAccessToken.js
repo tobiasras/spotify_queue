@@ -1,5 +1,6 @@
 import db from "../../database/mongodb.js";
 import {fetchSpotifyToken} from "./fetchSpotifyToken.js";
+import log from "../../logger/logger.js";
 
 let accessToken
 let refreshToken
@@ -11,6 +12,8 @@ let createdAt
  * USED WHEN LOGGING OUT OF A SPOTIFY ACCOUNT
  */
 export function clearToken() {
+    log.info({label: "spotify-tokens", message: `cleared` })
+
     accessToken = null
     refreshToken = null
     expiresIn = null
@@ -18,6 +21,8 @@ export function clearToken() {
 }
 
 export async function getAccessToken() {
+    log.info({label: "get-access-token", message: `fetching spotify tokens` })
+
     return new Promise(async (resolve, reject) => {
         if (!accessToken) {
             reject("not logged in")
@@ -67,11 +72,15 @@ async function requestTokenWithRefreshToken() {
     const body = new URLSearchParams()
     body.append('grant_type', 'refresh_token')
     body.append('refresh_token', refreshToken)
+
     const token = await fetchSpotifyToken(body)
+
     setSpotifyTokensValues(token)
 }
 
 export function setSpotifyTokensValues(token) {
+    log.info({label: "spotify-tokens", message: `set` })
+
     accessToken = token.access_token
     refreshToken = token.refresh_token
     expiresIn = token.expires_in

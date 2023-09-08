@@ -10,6 +10,7 @@
  *
  * @returns {Promise<any>}
  */
+import log from "../../logger/logger.js";
 
 export async function fetchSpotifyToken (requestTokenInfo) {
     const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -21,6 +22,8 @@ export async function fetchSpotifyToken (requestTokenInfo) {
         },
         body: requestTokenInfo
     })
+
+    log.info({label: "spotify-token", message: `fetching spotify tokens, Status: ${response.status}`})
 
     return response.json()
 }

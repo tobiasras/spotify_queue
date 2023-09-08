@@ -17,14 +17,15 @@ export function isQueuePlaying() {
     return false;
 }
 
+
 export function startQueue(socket) {
     io.emit("playerState", true)
-    songCycle(0, socket) // 0, because no song is playing
+    songCycle(0, socket)
 }
 
 export function skipSong(socket) {
     clearTimeout(currentTimeout)
-    songCycle(0, socket) // 0, because no song is playing
+    songCycle(0, socket)
 }
 
 export function stopQueue() {
@@ -77,7 +78,6 @@ function songCycle(length, socket) {
 
     }, length)
 }
-
 
 export function addSongToQueue(track) {
     return new Promise(async (resolve, reject) => {
