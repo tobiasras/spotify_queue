@@ -25,7 +25,6 @@ checkIfLoggedInBefore().then((isLoggedIn) => {
 // SOCKETS
 const server = http.createServer(app)
 export const io = new Server(server)
-
 socketHandler(io)
 
 // ROUTES
@@ -33,7 +32,6 @@ app.use(spotifyAuthenticationRoutes)
 app.use(adminRoutes)
 app.use(spotifyRoutes)
 app.use(queueRoutes)
-
 
 // PAGES
 app.use(express.static('../client/build/'))
