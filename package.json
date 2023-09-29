@@ -2,6 +2,6 @@
   "name": "spotify_queue",
   "version": "1.0.0",
   "scripts": {
-    "start": "cd server && npm install && npm run production",
+    "start": "cd server && npm install && npm run production"
   }
 }
