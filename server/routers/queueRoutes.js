@@ -8,15 +8,12 @@ const queueRoutes = express.Router()
 
 queueRoutes.get('/api/queue/state' , (req, res) => {
    log.info({label: "/api/queue/state", message: `called`})
-
    res.send({"isPlaying": isQueuePlaying()});
-
 })
 
 queueRoutes.get('/api/queue/start', authenticateSecret , (req, res) => {
    log.info({label: "/api/queue/start", message: `called`})
-
-   startQueue(io)
+   startQueue(io);
    res.sendStatus(204);
 })
 
@@ -28,7 +25,6 @@ queueRoutes.get('/api/queue/skip', authenticateSecret , (req, res) => {
 
 queueRoutes.get('/api/queue/stop', authenticateSecret , (req, res) => {
    log.info({label: "/api/queue/stop", message: `called`})
-
    stopQueue()
    res.sendStatus(204)
 })

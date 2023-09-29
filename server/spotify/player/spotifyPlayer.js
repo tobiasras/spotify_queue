@@ -15,7 +15,6 @@ import {filterTrackObject} from "../filters/trackObjectFilter.js";
 export const state = () => {
     return new Promise(async (resolve, reject) => {
         let token
-
         try {
             token = await getAccessToken()
         } catch (e) {
