@@ -4,74 +4,62 @@
  * 21-06-2023
  */
 
-import { getAccessToken } from "../authentication/spotifyAccessToken.js";
-import {filterTrackObject} from "../filters/trackObjectFilter.js";
+import { getAccessToken } from '../authentication/spotifyAccessToken.js'
+import { filterTrackObject } from '../filters/trackObjectFilter.js'
 
 /**
  * Get information about the user’s current playback state, including track or episode, progress, and active device.
  *
  * Docs. https://developer.spotify.com/documentation/web-api/reference/get-information-about-the-users-current-playback
  */
-export const state = () => {
-    return new Promise(async (resolve, reject) => {
-        let token
+export const state = async () => {
+  let token
+  try {
+    token = await getAccessToken()
+  } catch (e) {
+    return
+  }
 
-        try {
-            token = await getAccessToken()
-        } catch (e) {
-            reject(e)
-            return
-        }
+  const response = await fetch('https://api.spotify.com/v1/me/player', {
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  })
 
-        const response = await fetch('https://api.spotify.com/v1/me/player', {
-            headers: {
-                Authorization: 'Bearer ' + token
-            }
-        })
+  if (response.status !== 200) {
+    return null
+  } else {
+    const result = await response.json()
 
-        if (response.status !== 200) {
-            reject(response.status)
-        } else {
-            const result = await response.json()
-            const state = {
-                track: filterTrackObject(result.item),
-                is_playing: result.is_playing
-            }
-            resolve(state)
-        }
-    })
+    return {
+      track: filterTrackObject(result.item),
+      is_playing: result.is_playing
+    }
+  }
 }
-
 
 /**
  * Add an item to the end of the user's current playback queue.
  *
  * Docs. https://developer.spotify.com/documentation/web-api/reference/add-to-queue
  */
-export const addSong = (trackUri) => {
-    return new Promise(async (resolve, reject) => {
-        let token
+export const addSong = async (trackUri) => {
+  let token
 
-        try {
-            token = await getAccessToken()
-        } catch (e) {
-            reject(e)
-            return
-        }
+  try {
+    token = await getAccessToken()
+  } catch (e) {
+    return
+  }
 
-        const response = await fetch('https://api.spotify.com/v1/me/player/queue/?uri=' + trackUri, {
-            method: 'POST',
-            headers: {
-                Authorization: 'Bearer ' + token
-            }
-        })
+  const response = await fetch('https://api.spotify.com/v1/me/player/queue/?uri=' + trackUri, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  })
 
-        if (response.status !== 204) {
-            reject(response.status)
-        } else {
-            resolve(response.status)
-        }
-    })
+  return response.status
 }
 
 /**
@@ -79,31 +67,23 @@ export const addSong = (trackUri) => {
  *
  * Docs. https://developer.spotify.com/documentation/web-api/reference/pause-a-users-playback
  */
-export const pause = () => {
-    return new Promise(async (resolve, reject) => {
+export const pause = async () => {
+  let token
 
-        let token
+  try {
+    token = await getAccessToken()
+  } catch (e) {
+    return
+  }
 
-        try {
-            token = await getAccessToken()
-        } catch (e) {
-            reject(e)
-            return
-        }
+  const response = await fetch('https://api.spotify.com/v1/me/player/pause', {
+    method: 'PUT',
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  })
 
-        const response = await fetch('https://api.spotify.com/v1/me/player/pause', {
-            method: 'PUT',
-            headers: {
-                Authorization: 'Bearer ' + token
-            }
-        })
-
-        if (response.status !== 204) {
-            reject(response.status)
-        } else {
-            resolve(response.status)
-        }
-    })
+  return response.status
 }
 
 /**
@@ -111,31 +91,23 @@ export const pause = () => {
  *
  * Docs. https://developer.spotify.com/documentation/web-api/reference/start-a-users-playback
  */
-export const play = () => {
-    return new Promise(async (resolve, reject) => {
+export const play = async () => {
+  let token
 
-        let token
+  try {
+    token = await getAccessToken()
+  } catch (e) {
+    return
+  }
 
-        try {
-            token = await getAccessToken()
-        } catch (e) {
-            reject(e)
-            return
-        }
+  const response = await fetch('https://api.spotify.com/v1/me/player/play', {
+    method: 'PUT',
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  })
 
-        const response = await fetch('https://api.spotify.com/v1/me/player/play', {
-            method: 'PUT',
-            headers: {
-                Authorization: 'Bearer ' + token
-            }
-        })
-
-        if (response.status !== 204) {
-            reject(response.status)
-        } else {
-            resolve(response.status)
-        }
-    })
+  return response.status
 }
 
 /**
@@ -143,74 +115,54 @@ export const play = () => {
  *
  * Docs. https://developer.spotify.com/documentation/web-api/reference/skip-users-playback-to-previous-track
  */
-export const previous = () => {
-    return new Promise(async (resolve, reject) => {
+export const previous = async () => {
+  let token
 
-        let token
+  try {
+    token = await getAccessToken()
+  } catch (e) {
+    return
+  }
 
-        try {
-            token = await getAccessToken()
-        } catch (e) {
-            reject(e)
-            return
-        }
+  const response = fetch('https://api.spotify.com/v1/me/player/previous', {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  })
 
-        const response = fetch('https://api.spotify.com/v1/me/player/previous', {
-            method: 'POST',
-            headers: {
-                Authorization: 'Bearer ' + token
-            }
-        })
-
-        if (response.status !== 204) {
-            reject(response.status)
-        } else {
-            resolve(response.status)
-        }
-    })
+  return response.status
 }
 
 /**
  * Skips to next track in the user’s queue.
  * Docs: https://developer.spotify.com/documentation/web-api/reference/skip-users-playback-to-next-track
  */
-export const next = () => {
-    return new Promise(async (resolve, reject) => {
-        let token
+export const next = async () => {
+  let token
 
-        try {
-            token = await getAccessToken()
-        } catch (e) {
-            reject(e)
-            return
-        }
+  try {
+    token = await getAccessToken()
+  } catch (e) {
+    return
+  }
 
-        const response = await fetch('https://api.spotify.com/v1/me/player/next', {
-            method: 'POST',
-            headers: {
-                Authorization: 'Bearer ' + token
-            }
+  const response = await fetch('https://api.spotify.com/v1/me/player/next', {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
 
-        })
+  })
 
-        if (response.status !== 204) {
-            reject(response.status)
-        } else {
-            resolve(response.status)
-        }
-    })
+  return response.status
 }
 
 export default {
-    next,
-    previous,
-    play,
-    pause,
-    addSong,
-    state
-
+  next,
+  previous,
+  play,
+  pause,
+  addSong,
+  state
 }
-
-
-
-

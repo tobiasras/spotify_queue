@@ -3,5 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "cd server && npm install && npm run production",
+    "eslint-server": "cd server && npx eslint . --fix",
+    "eslint-all": "npm run eslint-server && npm run eslint-client"
   }
 }
