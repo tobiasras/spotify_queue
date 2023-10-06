@@ -10,21 +10,20 @@
  *
  * @returns {Promise<any>}
  */
-import log from "../../logger/logger.js";
+import log from '../../logger/logger.js'
 
 export async function fetchSpotifyToken (requestTokenInfo) {
-    const response = await fetch('https://accounts.spotify.com/api/token', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            // eslint-disable-next-line new-cap
-            Authorization: 'Basic ' + (new Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
-        },
-        body: requestTokenInfo
-    })
+  const response = await fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      // eslint-disable-next-line new-cap
+      Authorization: 'Basic ' + (new Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
+    },
+    body: requestTokenInfo
+  })
 
-    log.info({label: "spotify-token", message: `fetching spotify tokens, Status: ${response.status}`})
+  log.info({ label: 'spotify-token', message: `fetching spotify tokens, Status: ${response.status}` })
 
-    return response.json()
+  return response.json()
 }
-

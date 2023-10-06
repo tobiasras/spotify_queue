@@ -1,12 +1,11 @@
 import querystring from 'querystring'
-import {clearToken, getAccessToken, setSpotifyTokensValues} from '../spotify/authentication/spotifyAccessToken.js'
+import { clearToken, getAccessToken, setSpotifyTokensValues } from '../spotify/authentication/spotifyAccessToken.js'
 import express from 'express'
-import {fetchSpotifyToken} from "../spotify/authentication/fetchSpotifyToken.js";
-import {isQueuePlaying, stopQueue} from "../queue/queue.js";
-import log from "../logger/logger.js";
+import { fetchSpotifyToken } from '../spotify/authentication/fetchSpotifyToken.js'
+import { isQueuePlaying, stopQueue } from '../queue/queue.js'
+import log from '../logger/logger.js'
 
 const routerSpotifyAuthentication = express.Router() // URL : /auth/***
-
 
 routerSpotifyAuthentication.get('/api/auth/login', (req, res) => {
   const redirectLink = 'https://accounts.spotify.com/authorize?' +
@@ -23,15 +22,14 @@ routerSpotifyAuthentication.get('/api/auth/login', (req, res) => {
 })
 
 routerSpotifyAuthentication.get('/api/auth/logout', (req, res) => {
-  log.info({label: "Logout", message: `logout of spotify:` })
+  log.info({ label: 'Logout', message: 'logout of spotify:' })
 
-  if (isQueuePlaying()){
+  if (isQueuePlaying()) {
     stopQueue()
   }
   clearToken()
   res.sendStatus(204)
 })
-
 
 /**
  * USED BY FRONTEND TO CHECK IF A SPOTIFY ACCOUNT IS CONNECTED
@@ -48,14 +46,13 @@ routerSpotifyAuthentication.get('/api/auth/state', async (req, res) => {
     })
     res.send(await result.json())
   } catch (e) {
-    log.warn({label: "/api/auth/state", message: `spotify account not connected` })
+    log.warn({ label: '/api/auth/state', message: 'spotify account not connected' })
     res.sendStatus(400)
   }
 })
 
-
 routerSpotifyAuthentication.get('/api/auth/callback', async (req, res) => {
-  log.warn({label: "/api/auth/callback", message: `called` })
+  log.warn({ label: '/api/auth/callback', message: 'called' })
 
   const code = req.query.code || null
   const requestTokenInfo = new URLSearchParams()
@@ -72,6 +69,5 @@ routerSpotifyAuthentication.get('/api/auth/callback', async (req, res) => {
 
   res.redirect('/admin')
 })
-
 
 export default routerSpotifyAuthentication

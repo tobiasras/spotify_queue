@@ -12,10 +12,6 @@ export const Queue = (props) => {
             setQueue(data);
         };
 
-        // socket.current.emit("loadQueue");
-        // socket.current.on("queue", handleQueueUpdate);
-        // return () => socket.current.off("queue", handleQueueUpdate);
-
         const socketCurr = socket.current
 
         socketCurr.emit("loadQueue");
@@ -33,18 +29,7 @@ export const Queue = (props) => {
                     {queue !== ""
                         ? queue.map((trackInfo, index) => (
                               <li key={index} className="flex items-center rounded-lg hover:bg-neutral-700">
-                                  <Track key={trackInfo.id} {...trackInfo} />                                  
-                                  {/* <div className="flex items-center gap-2">
-                                      <p className="text-center font-black">12</p>
-                                      <div className="flex flex-col gap-2">
-                                          <button className="py-[0.4rem] px-3 hover:bg-neutral-800 rounded-full">
-                                              &uarr;
-                                          </button>
-                                          <button className="py-[0.4rem] px-3 hover:bg-neutral-800 rounded-full">
-                                              &darr;
-                                          </button>
-                                      </div>
-                                  </div> */}
+                                  <Track key={trackInfo.id} {...trackInfo} />
                               </li>
                           ))
                         : "Chould not get track"}
