@@ -8,5 +8,5 @@ log.info({ label: 'startup', message: `is production: ${isProduction}` })
 if (isProduction) {
   dotenv.config({ path: '../.env' })
 } else {
-  dotenv.config({ path: './.env' })
+  dotenv.config({ path: '../.env' })
 }

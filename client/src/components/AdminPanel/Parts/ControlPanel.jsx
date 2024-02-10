@@ -92,6 +92,27 @@ const ControlPanel = (props) => {
         }
     }
 
+    async function addSongToFallbackPlaylist(){
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/queue/fallback`, {
+            method: "POST",
+            headers: {
+                authorization: `bearer ${sessionStorage.getItem("secret_key")}`
+            }
+        })
+
+        if (response.status === 204) {
+            setToast(
+                {
+                    type: "success",
+                    text: "Added song to fallback playlist"
+                }
+            )
+            setIsToastShowing(true)
+        } else {
+            setToast(toastServerError)
+            setIsToastShowing(true)
+        }
+    }
 
     return (
         <>
@@ -117,18 +138,21 @@ const ControlPanel = (props) => {
                         </button>
                     </>
                 }
+
+                <button type="button" onClick={addSongToFallbackPlaylist}
+                        className="text-neutral-400 bg-neutral-800  hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center ">
+                    Add To Fallback
+                </button>
+
             </div>
 
             <div className="mt-4">
-
                 {isToastShowing ?
                     <Toast type={toast.type} text={toast.text}> </Toast> :
                     <></>
                 }
             </div>
         </>
-
-
     )
 }
 export default ControlPanel

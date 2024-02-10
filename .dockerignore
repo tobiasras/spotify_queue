@@ -1,0 +1,13 @@
+docs
+.github
+.eslintignore
+env_template
+
+
+
+client/build
+client/node_modules
+client/env_template
+client/.env
+client/tailwind.config.jss
+server/node_modules

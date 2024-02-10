@@ -12,8 +12,6 @@ routerAdmin.get('/api/admin/:password', (req, res) => {
 
   if (req.params.password === process.env.SECRET_PASSWORD) {
     bcrypt.hash(myPlaintextPassword, saltRounds, (err, hash) => {
-      log.info({ label: 'Admin login', message: `!!delete this!!  ${err}` })
-
       res.send({ token: hash })
     })
   } else {

@@ -12,7 +12,6 @@ let createdAt
  */
 export function clearToken () {
   log.info({ label: 'spotify-tokens', message: 'cleared' })
-
   accessToken = null
   refreshToken = null
   expiresIn = null
@@ -20,7 +19,7 @@ export function clearToken () {
 }
 
 export async function getAccessToken () {
-  log.info({ label: 'get-access-token', message: 'fetching spotify tokens' })
+  log.info({ label: 'get-access-token', message: 'using loaded token' })
 
   if (!accessToken) {
     return 'not logged in'
@@ -43,17 +42,6 @@ export async function getAccessToken () {
 /**
  * Checks database if a token exist in database
  */
-
-export async function checkIfLoggedInBefore () {
-  const token = await db.spotifyAccess.findOne({ username: process.env.USER_PROFILE })
-
-  if (token) {
-    setSpotifyTokensValues(token)
-    return true
-  } else {
-    return false
-  }
-}
 
 function isTokenExpired () {
   try {

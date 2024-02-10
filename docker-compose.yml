@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - SPOTIFY_CLIENT_ID=fe8dbf7f7414458283985b10b6264671
+      - SPOTIFY_CLIENT_SECRET=664dafe9611b4921954483213088b74d
+      - SPOTIFY_CLIENT_CALLBACK_URL=http://localhost:8080/api/auth/callback
+      - MONGODB_URL=mongodb+srv://masterbrew:guldbar@queuer.jgbuh53.mongodb.net/?retryWrites=true&w=majority
+      - SECRET_PASSWORD=5555
+      - SECRET_KEY=hello

@@ -17,20 +17,12 @@ const AddSongPage = () => {
         // socketRef.current.on('connect', () => console.log(socketRef.current.id));
 
         socketRef.current.on("addedSongResponse", (data) => {
-            console.log(data);
         });
 
         socketRef.current.on("addToQueue", (data) => {
-            console.log(data);
             setTrack(data);
         });
     });
-
-    // useEffect(() => {
-    //     setTimeout(()=> {
-    //         setTimedPopup(true)
-    //     }, 3000)
-    // }, []);
 
     const handleClick = (data) => {
         if (socketRef.current) {

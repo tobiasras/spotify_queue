@@ -2,8 +2,12 @@
   "name": "spotify_queue",
   "version": "1.0.0",
   "scripts": {
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
     "start": "cd server && npm install && npm run production",
     "eslint-server": "cd server && npx eslint . --fix",
     "eslint-all": "npm run eslint-server && npm run eslint-client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
