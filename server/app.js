@@ -31,18 +31,18 @@ app.use(express.urlencoded({extended: true}))
 const server = http.createServer(app)
 
 
-/*
+
 export const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
   }
 });
-*/
 
-export const io = new Server(server);
+
+
 
 socketHandler(io)
 

@@ -6,12 +6,12 @@ export const socketHandler = (io) => {
   io.on('connection', (socket) => {
 
     const id = setInterval(function () {
-      ws.send(JSON.stringify(process.memoryUsage()), function () {
+      socket.send(JSON.stringify(process.memoryUsage()), function () {
       });
     }, 100);
 
 
-    ws.on('close', function () {
+    io.on('close', function () {
       console.log('stopping client interval');
       clearInterval(id);
     });
