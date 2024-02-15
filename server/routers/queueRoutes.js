@@ -1,5 +1,5 @@
 import express from 'express'
-import {currentTrack, isQueuePlaying, skipSong, startQueue, stopQueue} from '../queue/queue.js'
+import {clearQueue, currentTrack, isQueuePlaying, skipSong, startQueue, stopQueue} from '../queue/queue.js'
 import {io} from '../app.js'
 import {authenticateSecret} from '../middelware/adminAuthMiddelware.js'
 import log from '../logger/logger.js'
@@ -38,24 +38,63 @@ queueRoutes.get('/api/queue/track', (req, res) => {
     }
 })
 
-
+/**
+Adds current playing song to the fallback playlist
+ */
 queueRoutes.post('/api/queue/fallback', authenticateSecret, async (req, res) => {
-    const result = await db.queue.find()
-    const queue = await result.toArray()
-    const time = new Date(0)
 
-    const tracksWithLastPlayedField = queue.map(track => {
-        track.last_played = time
-        return track
-    })
+    const track = await db.fallbackPlaylist.findOne({id: currentTrack.id})
+    if (track) {
+        log.info({label: '/api/queue/fallback', message: `${currentTrack.name} allready exist in fallback database`})
+        return res.sendStatus(409)
+    }
+
+    const trackToFallBackPlaylist = currentTrack
+    trackToFallBackPlaylist["last_played"] = new Date()
+
+    log.info({label: '/api/queue/fallback', message: `Added new song to fallback playlist: ${trackToFallBackPlaylist.name}`})
 
     try {
-        const response = db.fallbackPlaylist.insertMany(tracksWithLastPlayedField)
+        const response = db.fallbackPlaylist.insertOne(trackToFallBackPlaylist)
         console.log(await response)
         res.sendStatus(204)
     } catch (e) {
+        console.log(e)
         res.sendStatus(400)
     }
 })
+
+queueRoutes.post('/api/queue/ban', authenticateSecret, async (req, res) => {
+
+    const track = await db.bannedSongs.findOne({id: currentTrack.id})
+    if (track) {
+        log.info({label: '/api/queue/ban', message: `${currentTrack.name} allready exist in banned songs`})
+        return res.sendStatus(409)
+    }
+
+    const trackToBannedList = currentTrack
+    log.info({label: '/api/queue/fallback', message: `Added new song to banned list: ${trackToBannedList.name}`})
+
+    try {
+        const response = db.bannedSongs.insertOne(trackToBannedList)
+        console.log(await response)
+        res.sendStatus(204)
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(400)
+    }
+})
+
+
+
+
+queueRoutes.get('/api/queue/clear', authenticateSecret, async (req, res) => {
+    await clearQueue();
+
+    res.sendStatus(204)
+})
+
+
+
 
 export default queueRoutes

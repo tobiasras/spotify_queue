@@ -6,6 +6,7 @@ import log from '../logger/logger.js'
 let currentTimeout
 export let currentTrack
 
+
 /**
  returns if queue is playing or not
  */
@@ -20,10 +21,23 @@ export function isQueuePlaying() {
 
 export function startQueue(socket) {
     io.emit('playerState', true)
+
     return songCycle(0, socket)
 }
 
 export function skipSong(socket) {
+
+    const promise = db.playedSongs.updateOne(
+        { "name": currentTrack.name },
+        { $set: {"song_skipped": true} }
+    )
+
+    promise.then(res => {
+        console.log(res)
+    })
+
+    log.info({label: 'played songs', message: `Updated skip field on plated songs to true`})
+
     clearTimeout(currentTimeout)
     songCycle(0, socket)
 }
@@ -32,58 +46,6 @@ export function stopQueue() {
     clearTimeout(currentTimeout)
     spotifyPlayer.pause()
     io.emit('playerState', false)
-}
-
-function songCycle(length, socket) {
-    db.queue.find().toArray().then((currentQueue) => {
-        socket.emit('queue', currentQueue)
-    })
-
-    currentTimeout = setTimeout(async () => {
-        try {
-            let result = await db.queue.findOneAndDelete({}, {sort: {_id: 1}}) // DELETES SONG AFTER FETCH
-            let newTrack = result.value
-
-            if (!newTrack) {
-                log.info({label: 'queue', message: `No track in queue, fetching fallback track:`})
-                // NO SONGS IN QUEUE
-                // FALL BACK PLAYLIST IS NEEDED
-                result = await db.fallbackPlaylist.findOneAndUpdate(
-                    {}, // your query
-                    {
-                        $set: {
-                            last_played: new Date()
-                        }
-                    }, {
-                        sort: {last_played: 1},
-                        returnOriginal: false
-                    }
-                )
-                newTrack = result.value
-            }
-
-            log.info({label: 'queue', message: `Track found, ${newTrack.name}`})
-
-
-            spotifyPlayer.addSong(newTrack.uri).then(() => {
-                try {
-                    spotifyPlayer.next().then(() => {
-                        currentTrack = newTrack
-                        socket.emit('currentSong', currentTrack)
-                    })
-                } catch (e) {
-                    log.info({label: 'starting new queue', message: 'no suitable spotify player found'})
-                }
-            })
-            console.log(`Now playing:  ${newTrack.name}`)
-            songCycle(newTrack.duration_ms, socket)
-
-
-        } catch (e) {
-            console.log(e)
-            return 'spotify has stopped'
-        }
-    }, length)
 }
 
 export async function addSongToQueue(track) {
@@ -116,4 +78,85 @@ export async function addSongToQueue(track) {
     } catch (e) {
         return 'database error'
     }
+}
+
+export async function clearQueue(){
+    const res = await db.queue.deleteMany()
+    console.log(res)
+
+
+
+    io.emit('queue', [])
+}
+
+function songCycle(length, socket) {
+    db.queue.find().toArray().then((currentQueue) => {
+        socket.emit('queue', currentQueue)
+    })
+
+    currentTimeout = setTimeout(async () => {
+        try {
+            let result = await db.queue.findOneAndDelete({}, {sort: {_id: 1}}) // DELETES SONG AFTER FETCH
+            let newTrack = result.value
+
+            let isFallbackTrack = false;
+
+            if (!newTrack) {
+                log.info({label: 'queue', message: `No track in queue, fetching fallback track:`})
+                // NO SONGS IN QUEUE
+                // FALL BACK PLAYLIST IS NEEDED
+                result = await db.fallbackPlaylist.findOneAndUpdate(
+                    {}, // your query
+                    {
+                        $set: {
+                            last_played: new Date()
+                        }
+                    }, {
+                        sort: {last_played: 1},
+                        returnOriginal: false
+                    }
+                )
+                newTrack = result.value
+                isFallbackTrack = true
+            }
+
+            log.info({label: 'queue', message: `Track found, ${newTrack.name}`})
+            spotifyPlayer.addSong(newTrack.uri).then(() => {
+                try {
+                    spotifyPlayer.next().then(() => {
+
+                        try {
+                            db.playedSongs.insertOne({
+                                "song_skipped": false, // init false, gets updated in skip song method
+                                "duration_ms": newTrack["duration_ms"],
+                                "href": newTrack.href,
+                                "id":newTrack.id,
+                                "is_fallback_playlist": isFallbackTrack,
+                                "played_at": new Date(),
+                                "uri": newTrack.uri,
+                                "name": newTrack.name,
+                            });
+
+                        } catch (e) {
+                            log.warning({label: 'Played songs db', message: 'Failed adding played song to playlist'})
+                        }
+
+                        currentTrack = newTrack
+                        socket.emit('currentSong', currentTrack)
+                    })
+
+                } catch (e) {
+                    log.info({label: 'starting new queue', message: 'no suitable spotify player found'})
+                }
+            })
+
+            // makes sure song is cut before end otherwise song can be skipped by spotify
+            songCycle(newTrack.duration_ms-100, socket)
+
+
+        } catch (e) {
+            console.log(e)
+            return 'spotify has stopped'
+        }
+    }, length)
 }

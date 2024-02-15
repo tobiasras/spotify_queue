@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import Toast from "./Toast";
 
 const ControlPanel = (props) => {
     const [isPlaying, setIsPlaying] = useState(true)
@@ -92,27 +93,7 @@ const ControlPanel = (props) => {
         }
     }
 
-    async function addSongToFallbackPlaylist(){
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/queue/fallback`, {
-            method: "POST",
-            headers: {
-                authorization: `bearer ${sessionStorage.getItem("secret_key")}`
-            }
-        })
 
-        if (response.status === 204) {
-            setToast(
-                {
-                    type: "success",
-                    text: "Added song to fallback playlist"
-                }
-            )
-            setIsToastShowing(true)
-        } else {
-            setToast(toastServerError)
-            setIsToastShowing(true)
-        }
-    }
 
     return (
         <>
@@ -139,11 +120,6 @@ const ControlPanel = (props) => {
                     </>
                 }
 
-                <button type="button" onClick={addSongToFallbackPlaylist}
-                        className="text-neutral-400 bg-neutral-800  hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center ">
-                    Add To Fallback
-                </button>
-
             </div>
 
             <div className="mt-4">
@@ -156,29 +132,3 @@ const ControlPanel = (props) => {
     )
 }
 export default ControlPanel
-
-const Toast = (props) => {
-    let textColor
-    let borderColor
-
-    switch (props.type) {
-        case "error":
-            textColor = "text-red-400"
-            borderColor = "border-red-400"
-            break;
-        case "success":
-            textColor = "text-green-400"
-            borderColor = "border-green-400"
-            break
-        default:
-            textColor = "text-gray-400"
-            borderColor = "border-gray-400"
-    }
-
-    return (
-        <div className={`${borderColor} border rounded p-3 text-center`}>
-            <p className={`${textColor}`}>{props.text}</p>
-        </div>
-
-    )
-}

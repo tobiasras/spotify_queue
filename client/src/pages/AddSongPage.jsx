@@ -8,15 +8,25 @@ import { BaseLayout } from "../layouts/BaseLayout";
 const AddSongPage = () => {
     const [search, setSearch] = useState([]);
     const [timedPopup, setTimedPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState("true")
+
     const [setTrack] = useState();
     const socketRef = useRef();
 
     useEffect(() => {
-        socketRef.current = io('/');
+        socketRef.current = io(`${process.env.REACT_APP_SERVER_URL}/`);
 
         // socketRef.current.on('connect', () => console.log(socketRef.current.id));
 
         socketRef.current.on("addedSongResponse", (data) => {
+            if (data === "song banned") {
+                setPopupMessage("You cant add this because it is banned :)")
+                setTimedPopup(true);
+
+            } else {
+                setPopupMessage("Song added to queue")
+                setTimedPopup(true);
+            }
         });
 
         socketRef.current.on("addToQueue", (data) => {
@@ -28,7 +38,7 @@ const AddSongPage = () => {
         if (socketRef.current) {
             socketRef.current.emit("addSong", data); // whatever event you want to emit on button click
         }
-        setTimedPopup(true);
+
     };
 
     return (
@@ -38,8 +48,9 @@ const AddSongPage = () => {
             </section>
             <section className="flex flex-col gap-4 relative">
                 <Search search={search} setSearch={setSearch} />
+
                 <Popup trigger={timedPopup} setTrigger={setTimedPopup}>
-                    <p>Added to queue</p>
+                    <p>{popupMessage}</p>
                 </Popup>
 
                 

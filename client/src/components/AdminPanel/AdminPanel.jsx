@@ -1,6 +1,7 @@
 import ControlPanel from "./Parts/ControlPanel";
 import SpotifyAuth from "./Parts/SpotifyAuth";
 import {useState} from "react";
+import Toolbar from "./Parts/Toolbar";
 
 const AdminPanel = () => {
 
@@ -21,10 +22,14 @@ const AdminPanel = () => {
                 <SpotifyAuth spotifyAccountConnectedUseState={spotifyAccountConnectedUseState} />
             </div>
 
-            { spotifyAccountConnectedUseState[0] &&
-                <div className="mt-4">
-                    <ControlPanel/>
-                </div>
+            {spotifyAccountConnectedUseState[0] &&
+                <>
+                    <div className="mt-4">
+                        <ControlPanel/>
+                    </div>
+
+                        <Toolbar />
+                </>
             }
         </div>
     )

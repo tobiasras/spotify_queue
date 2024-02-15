@@ -3,9 +3,14 @@ export const Search = (props) => {
   async function getSearch(e) {
     e.preventDefault()
     const searchTerm = e.target.elements.search_track.value;
-    const connSearch = await fetch(`/api/search/?q=${searchTerm}`, {
+
+    if (!searchTerm)
+      return
+
+    const connSearch = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/search/?q=${searchTerm}`, {
       method: "GET"
     });
+
     const dataSearch = await connSearch.json();
     props.setSearch(dataSearch)
   }
@@ -28,8 +33,6 @@ export const Search = (props) => {
                     className="text-gray-400 bg-neutral-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-4/12 sm:w-auto px-5 py-2.5 text-center ">Search
             </button>
           </div>
-
-
 
           <div id="search_results" className="hidden w-full bg-zinc-800 h-32 rounded-lg mt-4"></div>
         </div>
