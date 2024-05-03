@@ -1,0 +1,14 @@
+services:
+  webapp:
+    build:
+      context: Project/
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPOTIFY_CLIENT_ID:
+      SPOTIFY_CLIENT_SECRET:
+      SPOTIFY_CLIENT_CALLBACK_URL:
+      MONGODB_URL:
+      SECRET_PASSWORD:
+      SECRET_KEY:

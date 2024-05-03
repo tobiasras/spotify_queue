@@ -1,7 +1,7 @@
-docs
+../docs
 .github
-.eslintignore
-env_template
+Project/.eslintignore
+Project/env_template
 
 
 
